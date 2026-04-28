@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>国开社区公益</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background-color: #111827;
+            color: white;
+            padding: 0.5rem 1.5rem;
+        }
+
+        .top-bar-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .top-bar-text {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .top-bar-text .gray {
+            color: #d1d5db;
+        }
+
+        .top-bar-text .red {
+            color: #ef4444;
+        }
+
+        .top-bar-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .top-bar-actions a {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.875rem;
+            text-decoration: none;
+        }
+
+        .top-bar-actions .login {
+            color: #60a5fa;
+        }
+
+        .top-bar-actions .register {
+            color: #f87171;
+        }
+
+        .top-bar-actions .username {
+            color: #fbbf24;
+        }
+
+        .top-bar-actions .logout {
+            color: #9ca3af;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .nav-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            background-color: #ef4444;
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-text {
+            font-size: 1.125rem;
+            color: #1f2937;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: #4b5563;
+            transition: color 0.2s;
+        }
+
+        .nav-menu a:hover, .nav-menu a.active {
+            color: #ef4444;
+        }
+
+        .nav-contact {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .contact-icon {
+            background-color: #ef4444;
+            border-radius: 50%;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .contact-text .label {
+            font-size: 0.75rem;
+            color: #ef4444;
+        }
+
+        .contact-text .phone {
+            color: #1f2937;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 500px;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1200');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            color: white;
+        }
+
+        .hero-text {
+            max-width: 36rem;
+        }
+
+        .hero-text p {
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-text h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 3rem;
+        }
+
+        .hero-brand .red {
+            color: #ef4444;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 9999px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #dc2626;
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: #1f2937;
+        }
+
+        .btn-secondary:hover {
+            background-color: #f3f4f6;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 4rem 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            text-align: center;
+        }
+
+        .feature-icon {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .feature-icon-bg {
+            background-color: #fef2f2;
+            border-radius: 50%;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feature-card h3 {
+            color: #ef4444;
+            margin-bottom: 0.75rem;
+            font-size: 1.125rem;
+        }
+
+        .feature-card p {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        /* News Section */
+        .news {
+            padding: 4rem 0;
+            background-color: #f9fafb;
+        }
+
+        .news-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .news-header h2 {
+            color: #ef4444;
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
+        }
+
+        .news-header p {
+            color: #6b7280;
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .news-card {
+            background-color: white;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s;
+        }
+
+        .news-card:hover {
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .news-card img {
+            width: 100%;
+            height: 192px;
+            object-fit: cover;
+        }
+
+        .news-card-content {
+            padding: 1rem;
+        }
+
+        .news-date {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #6b7280;
+            font-size: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .news-card h3 {
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .news-card p {
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .news-link {
+            color: #ef4444;
+            font-size: 0.875rem;
+            text-decoration: none;
+        }
+
+        .news-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #111827;
+            color: #9ca3af;
+            padding: 3rem 0;
+        }
+
+        .footer-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-column h4 {
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-column a {
+            color: #9ca3af;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-column a:hover {
+            color: white;
+        }
+
+        .footer-contact {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-bottom {
+            padding-top: 2rem;
+            border-top: 1px solid #374151;
+            text-align: center;
+            font-size: 0.875rem;
+        }
+
+        .footer-bottom p {
+            margin-bottom: 1rem;
+        }
+
+        .footer-bottom .red {
+            color: #ef4444;
+        }
+
+        /* Icons */
+        .icon {
+            width: 24px;
+            height: 24px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .icon-fill {
+            fill: currentColor;
+        }
+
+        .icon-sm {
+            width: 16px;
+            height: 16px;
+        }
+
+        .icon-xs {
+            width: 12px;
+            height: 12px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                gap: 1rem;
+                font-size: 0.875rem;
+            }
+
+            .hero-text h1 {
+                font-size: 2rem;
+            }
+
+            .hero-brand {
+                font-size: 2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <div class="top-bar-text">
+                <span>邻里有难我在场，社区公益一起帮</span>
+            </div>
+            <div class="top-bar-actions">
+                <?php if (!empty($userId)): ?>
+                    <span class="username">你好，<?php echo htmlspecialchars($username); ?></span>
+                    <a href="/user/logout" class="logout">退出</a>
+                <?php else: ?>
+                    <a href="/user/login" class="login">登录</a>
+                    <a href="/user/register" class="register">注册</a> 
+                <?php endif; ?>
+<a href="/dashboard/index" style="color: #ffffff;">用户中心</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg class="icon" style="color: white; fill: white;">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                </div>
+                <div class="logo-text">国开社区公益</div>
+            </div>
+
+            <ul class="nav-menu">
+                <li><a href="/" class="active">主页</a></li>
+                <li><a href="/about">关于我们</a></li>
+                <li><a href="/project/index">公益广场</a></li>
+                <li><a href="/help/index">求助中心</a></li>
+                <li><a href="/news/index">新闻案例</a></li>
+                <li><a href="/contact">联系我们</a></li>
+            </ul>
+
+            <div class="nav-contact">
+                <div class="contact-icon">
+                    <svg class="icon icon-sm" style="color: white;" width="26" height="26" viewBox="0 0 24 24">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>
+                </div>
+                <div class="contact-text">
+                    <div class="label">联系我们</div>
+                    <div class="phone">400-888-888</div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <p>邻里有难我在场，社区公益一起帮</p>
+                <h1>数字化连接居民与资源，让社区互助更便捷、更温暖。</h1>
+                <div class="hero-buttons">
+                    <a href="/project" class="btn btn-primary">立即参与 →</a>
+                    <a href="/about" class="btn btn-secondary">了解我们</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <div class="feature-icon-bg">
+                            <svg class="icon" style="color: #ef4444;">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3>发布求助</h3>
+                    <p>如果您遇到了困难，可以在我们的平台发起求助！不幸总是暂时的！</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <div class="feature-icon-bg">
+                            <svg class="icon" style="color: #ef4444;">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3>公益广场</h3>
+                    <p>如果您有好的点子，你可以在我们的平台发布！让更多的人参与进来！</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <div class="feature-icon-bg">
+                            <svg class="icon" style="color: #ef4444;">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3>求助中心</h3>
+                    <p>浏览求助中心，你可以为更多人提供力所能及的帮助！</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <div class="feature-icon-bg">
+                            <svg class="icon" style="color: #ef4444;">
+                                <circle cx="12" cy="8" r="7"></circle>
+                                <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3>组织认证</h3>
+                    <p>如果您是公益组织，欢迎申请认证！我们将为您设置特殊标识让更多人了解您的公益项目！</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- News Section -->
+    <section class="news">
+        <div class="container">
+            <div class="news-header">
+                <h2>平台新闻 / 经典案例</h2>
+                <p>了解我们最新的动态和经典成功案例</p>
+            </div>
+
+            <div class="news-grid">
+                <?php if (!empty($latestNews)): ?>
+                    <?php foreach ($latestNews as $item): ?>
+                        <?php
+                        // 封面：有就用封面，没有用默认图
+                        $defaultCover = 'https://images.unsplash.com/photo-1593113702251-272b1bc414a9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600';
+                        $cover = !empty($item['cover']) ? $item['cover'] : $defaultCover;
+                        ?>
+                        <div class="news-card">
+                            <img
+                                src="<?php echo htmlspecialchars($cover); ?>"
+                                alt="<?php echo htmlspecialchars($item['title']); ?>">
+                            <div class="news-card-content">
+                                <div class="news-date">
+                                    <svg class="icon icon-xs">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    </svg>
+                                    <span><?php echo $item['create_time']; ?></span>
+                                </div>
+                                <h3><?php echo htmlspecialchars($item['title']); ?></h3>
+                                <p>
+                                    <?php
+                                    $summary = $item['summary'] ?: $item['content'];
+                                    $summary = strip_tags($summary);
+                                    if (mb_strlen($summary, 'UTF-8') > 40) {
+                                        echo htmlspecialchars(mb_substr($summary, 0, 40, 'UTF-8')) . '...';
+                                    } else {
+                                        echo htmlspecialchars($summary);
+                                    }
+                                    ?>
+                                </p>
+                                <a href="/news/detail?id=<?php echo $item['id']; ?>" class="news-link">了解详情 →</a>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p>暂无新闻内容。</p>
+                <?php endif; ?>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h4>友情链接</h4>
+                    <ul>
+                        <li><a href="https://www.baidufoundation.org.cn/">百度基金会</a></li>
+                        <li><a href="https://gongyi.qq.com/">腾讯公益</a></li>
+                        <li><a href="https://www.antfoundation.org.cn/">浙江蚂蚁公益基金会</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>便捷通道</h4>
+                    <ul>
+                        <li><a href="/news/index?category=notice">平台公告</a></li>
+                        <li><a href="/help/index">求助信息</a></li>
+                        <li><a href="/project/index">公益项目</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>我要反馈</h4>
+                    <ul>
+                        <li>                <p>
+                    这里是国开社区公益平台，在这里你可以寻求帮助，也可以我们帮助他人。如果你有任何意见，欢迎联系我们。
+                </p></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>联系我们</h4>
+                    <div class="footer-contact">
+                        <div class="footer-contact-item">
+                            <svg class="icon icon-sm" width="26" height="26" viewBox="0 0 24 24">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                            </svg>
+                            <span>电话：400-888-888</span>
+                        </div>
+                        <div class="footer-contact-item">
+                            <svg class="icon icon-sm" width="26" height="26" viewBox="0 0 24 24">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                            <span>邮箱：admin@admin.com</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>
+                    © 版权所有 <span class="red">国开社区公益</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

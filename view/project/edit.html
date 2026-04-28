@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>编辑公益项目 - 国开社区公益</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- wangEditor v4 UMD 版本（PC+移动端均可编辑） -->
+    <script src="https://unpkg.com/wangeditor@4.7.15/dist/wangEditor.min.js"></script>
+
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Roboto','Oxygen','Ubuntu','Cantarell','Fira Sans','Droid Sans','Helvetica Neue',sans-serif;
+            background:#f9fafb;
+        }
+        #editor {
+            min-height: 260px;
+        }
+        @media (max-width: 640px) {
+            #editor {
+                min-height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="min-h-screen bg-gray-100">
+    <header class="bg-[#6b5b95] text-white px-6 py-4 flex items-center justify-between">
+        <h1 class="text-lg font-semibold">编辑公益项目</h1>
+        <a href="/userCenter/posts" class="text-sm underline hover:no-underline">返回我的发布</a>
+    </header>
+
+    <main class="max-w-4xl mx-auto p-4 sm:p-6">
+        <?php
+        // 统一准备一个数组，兼容新建和编辑
+        $p = !empty($project) ? $project : [
+            'id'        => 0,
+            'title'     => '',
+            'cover'     => '',
+            'location'  => '',
+            'end_time'  => '',
+            'summary'   => '',
+            'contact'   => '',
+            'qrcode_image'  => '',
+            'content'   => '',
+        ];
+        ?>
+        <form method="post" action="/project/update" class="bg-white rounded-lg shadow p-4 sm:p-6 space-y-5">
+            <input type="hidden" name="id" value="<?php echo (int)$p['id']; ?>">
+
+            <!-- 标题 -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">项目标题</label>
+                <input
+                    type="text"
+                    name="title"
+                    value="<?php echo htmlspecialchars($p['title']); ?>"
+                    class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#6b5b95]"
+                    required
+                >
+            </div>
+
+            <!-- 封面图片 -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">封面图片</label>
+                <div class="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
+                    <input
+                        type="text"
+                        name="cover"
+                        id="cover-input"
+                        value="<?php echo htmlspecialchars($p['cover']); ?>"
+                        class="flex-1 border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#6b5b95]"
+                    required
+                        placeholder="可以粘贴图片地址，或点击右侧按钮上传"
+                    >
+                    <label class="inline-flex items-center justify-center px-3 py-2 bg-gray-100 border border-gray-300 rounded text-xs cursor-pointer hover:bg-gray-200">
+                        <input type="file" id="cover-file" class="hidden" accept="image/*">
+                        上传封面
+                    </label>
+                </div>
+                <p class="mt-1 text-xs text-gray-500">
+                    封面建议尺寸 800×400 左右，JPG/PNG 格式。
+                </p>
+
+                <div class="mt-3">
+                    <div class="text-xs text-gray-500 mb-1">封面预览：</div>
+                    <div class="w-full h-40 sm:h-48 bg-gray-100 rounded flex items-center justify-center overflow-hidden">
+                        <img
+                            id="cover-preview"
+                            src="<?php echo $p['cover'] !== '' ? htmlspecialchars($p['cover']) : 'https://via.placeholder.com/800x400?text=%E6%97%A0%E5%B0%81%E9%9D%A2%E5%9B%BE'; ?>"
+                            alt="封面预览"
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                </div>
+            </div>
+
+            <!-- 活动地点 -->
+            <div>
+                <label class="block text-sm text-gray-700 mb-1">活动地点</label>
+                <input type="text" name="location"
+                       value="<?php echo htmlspecialchars($p['location']); ?>"
+                       class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#6b5b95]"
+                    required
+                       placeholder="例如：XX市XX区XX社区活动中心">
+            </div>
+
+            <!-- 截止日期（end_time） -->
+            <div>
+                <label class="block text-sm text-gray-700 mb-1">报名截止日期</label>
+                <input type="date" name="end_time"
+                       value="<?php echo $p['end_time'] ? htmlspecialchars(substr((string)$p['end_time'], 0, 10)) : ''; ?>"
+                       class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#6b5b95]"
+                    required>
+            </div>
+
+            <!-- 项目简介 -->
+            <div>
+                <label class="block text-sm text-gray-700 mb-1">项目简介</label>
+                <textarea name="summary" rows="3"
+                          class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#6b5b95]"
+                          placeholder="用一两段话概括这个项目的主要内容和意义"
+                    required><?php echo htmlspecialchars($p['summary']); ?></textarea>
+            </div>
+
+            <!-- 联系方式 -->
+            <div>
+                <label class="block text-sm text-gray-700 mb-1">联系方式</label>
+                <input type="text" name="contact"
+                       value="<?php echo htmlspecialchars($p['contact']); ?>"
+                       class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#6b5b95]"
+                       placeholder="例如：电话、微信、邮箱等"
+                    required>
+            </div>
+
+            <!-- 收款二维码 -->
+            <div>
+                <label class="block text-sm text-gray-700 mb-1">收款二维码</label>
+                <div class="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
+                    <input type="text" name="qrcode_image" id="qrcode-image-input"
+                           value="<?php echo htmlspecialchars($p['qrcode_image'] ?? ''); ?>"
+                           class="flex-1 border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#6b5b95]"
+                           placeholder="可以粘贴收款二维码图片地址，或点击右侧按钮上传">
+                    <label class="inline-flex items-center justify-center px-3 py-2 bg-gray-100 border border-gray-300 rounded text-xs cursor-pointer hover:bg-gray-200">
+                        <input type="file" id="qrcode-image-file" class="hidden" accept="image/*">
+                        上传收款二维码
+                    </label>
+                </div>
+                <p class="text-xs text-gray-500">
+                    建议上传微信 / 支付宝等收款码，方便爱心人士直接打款（将展示在项目详情页右侧）。
+                </p>
+                <div class="mt-2 w-full max-w-xs border border-gray-200 rounded overflow-hidden bg-gray-50"
+                     style="display: <?php echo empty($p['qrcode_image']) ? 'none' : 'block'; ?>;">
+                    <img id="qrcode-image-preview"
+                         src="<?php echo htmlspecialchars($p['qrcode_image'] ?? ''); ?>"
+                         alt="收款二维码预览"
+                         class="w-full object-cover">
+                </div>
+            </div>
+
+            <!-- 富文本内容（v4） -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">项目内容</label>
+                <div id="editor-toolbar" class="border border-gray-200 rounded-t px-2 py-1 bg-gray-50"></div>
+                <div id="editor" class="border border-gray-200 rounded-b"></div>
+
+                <!-- 隐藏 textarea 用于提交 -->
+                <textarea
+                    name="content"
+                    id="content-input"
+                    class="hidden"
+                ><?php echo htmlspecialchars($p['content']); ?></textarea>
+
+                <p class="mt-1 text-xs text-gray-500">
+                    可以输入文字、插入图片等富文本内容（PC 和手机上都可以编辑）。
+                </p>
+            </div>
+
+            <!-- 按钮：草稿 / 提交审核 -->
+            <div class="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-end pt-2">
+                <button type="submit" name="action" value="draft"
+                        class="px-4 py-2 rounded border border-gray-300 text-sm text-gray-700 hover:bg-gray-50">
+                    保存为草稿
+                </button>
+                <button type="submit" name="action" value="publish"
+                        class="px-4 py-2 rounded bg-[#6b5b95] text-sm text-white hover:bg-[#5a4a7f]">
+                    提交审核
+                </button>
+            </div>
+        </form>
+    </main>
+</div>
+
+<script>
+    // 封面上传
+    const coverInput   = document.getElementById('cover-input');
+    const coverFile    = document.getElementById('cover-file');
+    const coverPreview = document.getElementById('cover-preview');
+
+    if (coverInput && coverPreview) {
+        coverInput.addEventListener('input', function () {
+            const url = this.value.trim();
+            coverPreview.src = url || 'https://via.placeholder.com/800x400?text=%E6%97%A0%E5%B0%81%E9%9D%A2%E5%9B%BE';
+        });
+    }
+
+    if (coverFile) {
+        coverFile.addEventListener('change', function () {
+            const file = this.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('cover', file);
+
+            fetch('/project/uploadCover', {
+                method: 'POST',
+                body: formData
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.code === 1) {
+                        coverInput.value = data.url;
+                        coverPreview.src = data.url;
+                    } else {
+                        alert(data.msg || '上传失败');
+                    }
+                })
+                .catch(() => {
+                    alert('上传失败，请稍后再试');
+                });
+        });
+    }
+
+    // 收款二维码上传
+    const qrcodeInput   = document.getElementById('qrcode-image-input');
+    const qrcodeFile    = document.getElementById('qrcode-image-file');
+    const qrcodePreview = document.getElementById('qrcode-image-preview');
+    const qrcodeWrap    = qrcodePreview ? qrcodePreview.parentElement : null;
+
+    if (qrcodeInput && qrcodePreview) {
+        qrcodeInput.addEventListener('input', function () {
+            const url = this.value.trim();
+            if (url) {
+                qrcodePreview.src = url;
+                if (qrcodeWrap) qrcodeWrap.style.display = 'block';
+            } else {
+                if (qrcodeWrap) qrcodeWrap.style.display = 'none';
+            }
+        });
+    }
+
+    if (qrcodeFile) {
+        qrcodeFile.addEventListener('change', function () {
+            const file = this.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('qrcode', file);
+
+            fetch('/project/uploadQrcode', {
+                method: 'POST',
+                body: formData
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.code === 1) {
+                        qrcodeInput.value = data.url;
+                        qrcodePreview.src = data.url;
+                        if (qrcodeWrap) qrcodeWrap.style.display = 'block';
+                    } else {
+                        alert(data.msg || '上传失败');
+                    }
+                })
+                .catch(() => {
+                    alert('上传失败，请稍后再试');
+                });
+        });
+    }
+
+    // wangEditor v4 初始化
+    const E = window.wangEditor;
+    const editor = new E('#editor-toolbar', '#editor');
+
+    // 上传图片到服务器
+    editor.config.uploadImgServer = '/project/uploadContentImage';
+    editor.config.uploadFileName = 'wangeditor-uploaded-image';
+    editor.config.uploadImgMaxSize = 5 * 1024 * 1024;
+    editor.config.uploadImgMaxLength = 10;
+    editor.config.uploadImgAccept = ['jpg', 'jpeg', 'png', 'gif'];
+
+    editor.config.menus = [
+        'head',
+        'bold',
+        'italic',
+        'underline',
+        'list',
+        'justify',
+        'image',
+        'link',
+        'undo',
+        'redo'
+    ];
+
+    const contentInput = document.getElementById('content-input');
+    editor.config.onchange = function (html) {
+        contentInput.value = html;
+    };
+
+    editor.create();
+
+    if (contentInput.value) {
+        editor.txt.html(contentInput.value);
+    }
+</script>
+</body>
+</html>

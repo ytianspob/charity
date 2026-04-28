@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>国开社区公益 - 用户设置</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Roboto','Oxygen','Ubuntu','Cantarell','Fira Sans','Droid Sans','Helvetica Neue',sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+<div class="min-h-screen bg-gray-100">
+    <div class="flex flex-col md:flex-row min-h-screen">
+
+        <!-- 侧边栏：仅 md 及以上显示 -->
+        <aside class="hidden md:flex w-[240px] bg-[#6b5b95] text-white flex-col">
+            <div class="p-6">
+                <h2 class="text-xl font-semibold">用户中心</h2>
+            </div>
+
+            <div class="px-4 py-6 border-b border-white/10">
+                <div class="flex items-center gap-3">
+                    <img src="<?php echo htmlspecialchars($avatar); ?>"
+                         alt="头像"
+                         class="w-10 h-10 rounded-full object-cover bg-gray-200">
+                    <div>
+                        <div class="font-medium">
+                            <?php echo htmlspecialchars($nickname); ?>
+                        </div>
+                        <div class="text-sm text-white/60">
+                            <?php echo htmlspecialchars($username); ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="flex-1 py-4 text-sm">
+                <div class="px-4 mb-4 text-sm text-white/40">导航菜单</div>
+
+                <a href="/userCenter/index"
+                   class="w-full flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 border-l-4 border-transparent">
+                    <span>🏠</span><span>仪表盘</span>
+                </a>
+
+                <a href="/userCenter/posts"
+                   class="w-full flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 border-l-4 border-transparent">
+                    <span>📝</span><span>我的发布</span>
+                </a>
+
+                <a href="/userCenter/participate"
+                   class="w-full flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 border-l-4 border-transparent">
+                    <span>🤝</span><span>报名情况</span>
+                </a>
+
+                <a href="/userCenter/donation"
+                   class="w-full flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 border-l-4 border-transparent">
+                    <span>❤️</span><span>捐赠情况</span>
+                </a>
+
+                <a href="/userCenter/comments"
+                   class="w-full flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 border-l-4 border-transparent">
+                    <span>💬</span><span>评论管理</span>
+                </a>
+
+                <a href="/userCenter/settings"
+                   class="w-full flex items-center gap-3 px-4 py-3 bg-white/10 text-white border-l-4 border-white">
+                    <span>⚙️</span><span>用户设置</span>
+                </a>
+            </nav>
+
+            <!-- 返回网站 -->
+            <div class="px-4 pt-2 pb-1">
+                <a href="/"
+                   class="w-full bg-gray-500 hover:bg-gray-600 text-white rounded-full py-2 px-4 flex items-center justify-center gap-2 transition-colors">
+                    <span>🏠</span><span>返回网站</span>
+                </a>
+            </div>
+
+            <!-- 退出登录 -->
+            <div class="px-4 pt-1 pb-2">
+                <a href="/user/logout"
+                   class="w-full bg-[#e74c3c] hover:bg-[#c0392b] text-white rounded-full py-2 px-4 flex items-center justify-center gap-2 transition-colors">
+                    <span>⏏</span><span>退出登录</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- 主体 -->
+        <div class="flex-1 flex flex-col">
+
+            <!-- 顶部栏：含移动端菜单 -->
+            <header class="bg-[#6b5b95] text-white px-4 md:px-6 py-3 flex items-center justify-between md:justify-end gap-4">
+                <!-- 移动端菜单按钮与标题 -->
+                <div class="flex items-center gap-2 md:hidden">
+                    <button id="mobile-menu-toggle"
+                            type="button"
+                            class="inline-flex items-center justify-center w-9 h-9 rounded-full hover:bg-white/10 focus:outline-none">
+                        ☰
+                    </button>
+                    <span class="text-sm font-semibold">用户中心</span>
+                </div>
+
+                <!-- 右侧：铃铛 + 问候 -->
+                <div class="flex items-center gap-4 ml-auto">
+                    <!-- 站内信小铃铛 -->
+                    <div class="relative">
+                        <button id="msg-bell"
+                                type="button"
+                                class="relative inline-flex items-center justify-center w-9 h-9 rounded-full hover:bg-white/10 focus:outline-none">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                            </svg>
+                            <?php if (!empty($unreadCount)): ?>
+                                <span class="absolute -top-0.5 -right-0.5 inline-flex items-center justify-center
+                                             px-1.5 min-w-[18px] h-[18px] rounded-full bg-red-500 text-[11px] text-white">
+                                    <?php echo $unreadCount > 99 ? '99+' : (int)$unreadCount; ?>
+                                </span>
+                            <?php endif; ?>
+                        </button>
+
+                        <!-- 下拉面板 -->
+                        <div id="msg-dropdown"
+     class="hidden absolute right-2 top-full mt-2
+            w-[260px] max-w-[calc(100vw-1.5rem)]
+            bg-white text-gray-800 rounded-lg shadow-lg border border-gray-100 z-50">
+                            <div class="px-3 py-2 border-b border-gray-100 flex items-center justify-between">
+                                <span class="text-sm font-medium">站内信</span>
+                                <?php if (!empty($unreadCount)): ?>
+                                    <span class="text-xs text-red-500">有 <?php echo (int)$unreadCount; ?> 条未读</span>
+                                <?php else: ?>
+                                    <span class="text-xs text-gray-400">暂无未读消息</span>
+                                <?php endif; ?>
+                            </div>
+
+                            <div class="max-h-72 overflow-y-auto">
+                                <?php if (!empty($newMessages)): ?>
+                                    <?php foreach ($newMessages as $m): ?>
+                                        <?php
+                                        $sender = $m->sender_id > 0 ? ($msgSenderMap[(int)$m->sender_id] ?? null) : null;
+                                        $fromName = $m->type === 'system' || (int)$m->sender_id === 0
+                                            ? '系统消息'
+                                            : ($sender ? ($sender->nickname ?: $sender->username) : '用户已不存在');
+                                        $preview = $m->title ?: mb_substr(strip_tags((string)$m->content), 0, 30, 'UTF-8');
+                                        ?>
+                                        <a href="/message/detail?id=<?php echo (int)$m->id; ?>"
+                                           class="block px-3 py-2 text-sm hover:bg-gray-50">
+                                            <div class="flex items-center justify-between mb-0.5">
+                                                <span class="font-medium">
+                                                    <?php echo htmlspecialchars($fromName); ?>
+                                                </span>
+                                                <span class="text-[11px] text-gray-400 whitespace-nowrap">
+                                                    <?php echo $m->create_time ?? ''; ?>
+                                                </span>
+                                            </div>
+                                            <div class="text-xs text-gray-600">
+                                                <?php echo htmlspecialchars($preview); ?>
+                                            </div>
+                                        </a>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <div class="px-3 py-4 text-center text-sm text-gray-500">
+                                        暂无新消息
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+
+                            <div class="px-3 py-2 border-t border-gray-100 text-right">
+                                <a href="/message/index"
+                                   class="text-xs text-indigo-600 hover:text-indigo-800">
+                                    查看所有消息 &raquo;
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="px-1 py-1 text-sm">
+                        <span>你好，<?php echo htmlspecialchars($nickname); ?></span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- 移动端下拉菜单 -->
+            <nav id="mobile-menu"
+                 class="md:hidden hidden bg-[#6b5b95] text-white text-sm border-t border-white/10">
+                <a href="/userCenter/index" class="flex items-center gap-3 px-4 py-2 text-white/70 hover:bg-white/5 border-l-4 border-transparent">
+                    <span>🏠</span><span>仪表盘</span>
+                </a>
+                <a href="/userCenter/posts" class="flex items-center gap-3 px-4 py-2 text-white/70 hover:bg-white/5 border-l-4 border-transparent">
+                    <span>📝</span><span>我的发布</span>
+                </a>
+                <a href="/userCenter/participate" class="flex items-center gap-3 px-4 py-2 text-white/70 hover:bg-white/5 border-l-4 border-transparent">
+                    <span>🤝</span><span>报名情况</span>
+                </a>
+                <a href="/userCenter/donation" class="flex items-center gap-3 px-4 py-2 text-white/70 hover:bg-white/5 border-l-4 border-transparent">
+                    <span>❤️</span><span>捐赠情况</span>
+                </a>
+                <a href="/userCenter/comments" class="flex items-center gap-3 px-4 py-2 text-white/70 hover:bg-white/5 border-l-4 border-transparent">
+                    <span>💬</span><span>评论管理</span>
+                </a>
+                <a href="/userCenter/settings" class="flex items-center gap-3 px-4 py-2 bg-white/10 text-white border-l-4 border-white">
+                    <span>⚙️</span><span>用户设置</span>
+                </a>
+                <div class="px-4 py-3 flex gap-2">
+                    <a href="/"
+                       class="flex-1 bg-gray-500 hover:bg-gray-600 text-white rounded-full py-2 px-4 text-center text-xs">
+                        返回网站
+                    </a>
+                    <a href="/user/logout"
+                       class="flex-1 bg-[#e74c3c] hover:bg-[#c0392b] text-white rounded-full py-2 px-4 text-center text-xs">
+                        退出登录
+                    </a>
+                </div>
+            </nav>
+
+            <!-- 内容 -->
+            <main class="flex-1 p-4 md:p-6 space-y-6">
+
+                <!-- 联系方式 -->
+                <section class="bg-white rounded-lg shadow p-5">
+                    <h2 class="text-base font-semibold mb-3">联系方式(在报名后向发起人显示)</h2>
+                    <form method="post" action="/userCenter/updateContact" class="space-y-3 max-w-md">
+                        <div>
+                            <label class="block text-sm text-gray-700 mb-1">手机号</label>
+                            <input type="text" name="phone"
+                                   value="<?php echo htmlspecialchars($user['phone'] ?? ''); ?>"
+                                   class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#6b5b95]"
+                                   placeholder="请输入手机号" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-700 mb-1">邮箱</label>
+                            <input type="email" name="email"
+                                   value="<?php echo htmlspecialchars($user['email'] ?? ''); ?>"
+                                   class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#6b5b95]"
+                                   placeholder="请输入邮箱" required>
+                        </div>
+                        <div>
+                            <button type="submit"
+                                    class="px-4 py-2 rounded bg-[#6b5b95] text-sm text-white hover:bg-[#5a4a7f]">
+                                保存联系方式
+                            </button>
+                        </div>
+                    </form>
+                </section>
+
+                <!-- 修改密码 -->
+                <section class="bg-white rounded-lg shadow p-5">
+                    <h2 class="text-base font-semibold mb-3">修改密码</h2>
+                    <form method="post" action="/userCenter/updatePassword" class="space-y-3 max-w-md">
+                        <div>
+                            <label class="block text-sm text-gray-700 mb-1">旧密码</label>
+                            <input type="password" name="old_password"
+                                   class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#6b5b95]" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-700 mb-1">新密码</label>
+                            <input type="password" name="new_password"
+                                   class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#6b5b95]" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-700 mb-1">确认新密码</label>
+                            <input type="password" name="confirm_password"
+                                   class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#6b5b95]" required>
+                        </div>
+                        <div>
+                            <button type="submit"
+                                    class="px-4 py-2 rounded bg-[#6b5b95] text-sm text-white hover:bg-[#5a4a7f]">
+                                保存密码
+                            </button>
+                        </div>
+                    </form>
+                </section>
+
+                <!-- 密保设置 -->
+                <section class="bg-white rounded-lg shadow p-5">
+                    <h2 class="text-base font-semibold mb-3">密保设置</h2>
+
+                    <?php
+                    $hasSecurity = !empty($user['security_question']) && !empty($user['security_answer']);
+                    ?>
+                    <p class="text-xs text-gray-500 mb-3">
+                        当前密保状态：
+                        <?php if ($hasSecurity): ?>
+                            <span class="font-medium text-emerald-600">已设置</span>
+                        <?php else: ?>
+                            <span class="font-medium text-gray-600">未设置</span>
+                        <?php endif; ?>
+                        <span class="ml-1 text-gray-400">（出于安全考虑，具体问题和答案不会在页面上显示）</span>
+                    </p>
+
+                    <form method="post" action="/userCenter/updateSecurity" class="space-y-3 max-w-md">
+                        <div>
+                            <label class="block text-sm text-gray-700 mb-1">新的密保问题</label>
+                            <input type="text" name="security_question"
+                                   value=""
+                                   placeholder="请输入新的密保问题"
+                                   class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#6b5b95]">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-700 mb-1">新的密保答案</label>
+                            <input type="password" name="security_answer"
+                                   value=""
+                                   placeholder="请输入新的密保答案"
+                                   class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#6b5b95]">
+                        </div>
+                        <p class="text-xs text-gray-500">
+                            提示：设置后将覆盖原有密保问题和答案，请务必记住新的密保信息。
+                        </p>
+                        <div>
+                            <button type="submit"
+                                    class="px-4 py-2 rounded bg-[#6b5b95] text-sm text-white hover:bg-[#5a4a7f]">
+                                保存密保
+                            </button>
+                        </div>
+                    </form>
+                </section>
+
+                <!-- 头像设置 -->
+                <section class="bg-white rounded-lg shadow p-5">
+                    <h2 class="text-base font-semibold mb-3">头像设置</h2>
+                    <div class="flex flex-col sm:flex-row gap-4 sm:items-center">
+                        <div class="w-20 h-20 rounded-full overflow-hidden bg-gray-100">
+                            <img id="avatar-preview"
+                                 src="<?php echo htmlspecialchars($avatar); ?>"
+                                 alt="当前头像"
+                                 class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <form id="avatar-form" class="space-y-2">
+                                <label class="inline-flex items-center justify-center px-3 py-2 bg-gray-100 border border-gray-300 rounded text-xs cursor-pointer hover:bg-gray-200">
+                                    <input type="file" id="avatar-file" class="hidden" accept="image/*">
+                                    上传新头像
+                                </label>
+                                <p class="text-xs text-gray-500">
+                                    建议使用清晰的人物照片，支持 JPG/PNG 格式。
+                                </p>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 认证升级 -->
+                <section class="bg-white rounded-lg shadow p-5">
+                    <h2 class="text-base font-semibold mb-3">认证升级申请</h2>
+
+                    <?php
+                    $verifyStatus = $user['verify_status'] ?? 'none';
+                    $verifyStatusText = '未提交认证';
+                    if ($verifyStatus === 'pending') $verifyStatusText = '审核中';
+                    if ($verifyStatus === 'approved') $verifyStatusText = '已通过认证';
+                    if ($verifyStatus === 'rejected') $verifyStatusText = '认证被拒绝';
+                    ?>
+                    <p class="text-xs text-gray-500 mb-3">
+                        当前认证状态：<span class="font-medium text-gray-800"><?php echo $verifyStatusText; ?></span>
+                    </p>
+
+                    <form method="post" action="/userCenter/applyVerify" class="space-y-3">
+                        <div>
+                            <label class="block text-sm text-gray-700 mb-1">认证说明</label>
+                            <textarea name="verify_reason" rows="4"
+                                      class="w-full md:max-w-xl border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#6b5b95]"
+                                      placeholder="请简单说明你申请认证的原因和身份（如社区志愿者、社会组织等）"><?php echo htmlspecialchars($user['verify_reason'] ?? ''); ?></textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm text-gray-700 mb-1">证件照片</label>
+                            <div class="flex flex-col sm:flex-row gap-2 sm:items-center mb-2">
+                                <input type="text" name="verify_image" id="verify-image-input"
+                                       value="<?php echo htmlspecialchars($user['verify_image'] ?? ''); ?>"
+                                       class="flex-1 border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#6b5b95]"
+                                       placeholder="可以粘贴图片地址，或点击右侧按钮上传">
+                                <label class="inline-flex items-center justify-center px-3 py-2 bg-gray-100 border border-gray-300 rounded text-xs cursor-pointer hover:bg-gray-200">
+                                    <input type="file" id="verify-image-file" class="hidden" accept="image/*">
+                                    上传证件照片
+                                </label>
+                            </div>
+                            <p class="text-xs text-gray-500">
+                                建议上传身份证、工作证或相关证明的清晰照片，仅用于管理员人工审核。
+                            </p>
+                            <div class="mt-2 w-full max-w-xs border border-gray-200 rounded overflow-hidden bg-gray-50"
+                                 style="display: <?php echo empty($user['verify_image']) ? 'none' : 'block'; ?>;">
+                                <img id="verify-image-preview"
+                                     src="<?php echo htmlspecialchars($user['verify_image'] ?? ''); ?>"
+                                     alt="认证证件预览"
+                                     class="w-full object-cover">
+                            </div>
+                        </div>
+
+                        <div>
+                            <button type="submit"
+                                    class="px-4 py-2 rounded bg-[#6b5b95] text-sm text-white hover:bg-[#5a4a7f]">
+                                提交认证申请
+                            </button>
+                        </div>
+                    </form>
+                </section>
+
+            </main>
+
+            <footer class="p-4 text-center text-sm text-gray-500">
+                © 版权所有 国开社区公益
+            </footer>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 站内信下拉
+    (function () {
+        const bell = document.getElementById('msg-bell');
+        const dropdown = document.getElementById('msg-dropdown');
+
+        if (bell && dropdown) {
+            bell.addEventListener('click', function (e) {
+                e.stopPropagation();
+                dropdown.classList.toggle('hidden');
+            });
+
+            document.addEventListener('click', function () {
+                dropdown.classList.add('hidden');
+            });
+
+            dropdown.addEventListener('click', function (e) {
+                e.stopPropagation();
+            });
+        }
+    })();
+
+    // 移动端菜单
+    (function () {
+        const toggle = document.getElementById('mobile-menu-toggle');
+        const menu = document.getElementById('mobile-menu');
+        if (!toggle || !menu) return;
+
+        toggle.addEventListener('click', function (e) {
+            e.stopPropagation();
+            menu.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', function () {
+            menu.classList.add('hidden');
+        });
+
+        menu.addEventListener('click', function (e) {
+            e.stopPropagation();
+        });
+    })();
+
+    // 头像上传
+    const avatarFile    = document.getElementById('avatar-file');
+    const avatarPreview = document.getElementById('avatar-preview');
+
+    if (avatarFile && avatarPreview) {
+        avatarFile.addEventListener('change', function () {
+            const file = this.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('avatar', file);
+
+            fetch('/userCenter/uploadAvatar', {
+                method: 'POST',
+                body: formData
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.code === 1) {
+                        avatarPreview.src = data.url;
+                        alert('头像已更新');
+                    } else {
+                        alert(data.msg || '上传失败');
+                    }
+                })
+                .catch(() => {
+                    alert('上传失败，请稍后再试');
+                });
+        });
+    }
+
+    // 认证证件照片上传
+    const verifyFile    = document.getElementById('verify-image-file');
+    const verifyInput   = document.getElementById('verify-image-input');
+    const verifyPreview = document.getElementById('verify-image-preview');
+
+    if (verifyFile) {
+        verifyFile.addEventListener('change', function () {
+            const file = this.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('verify_image', file);
+
+            fetch('/userCenter/uploadVerifyImage', {
+                method: 'POST',
+                body: formData
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.code === 1) {
+                        verifyInput.value = data.url;
+                        if (verifyPreview) {
+                            verifyPreview.src = data.url;
+                            verifyPreview.parentElement.style.display = 'block';
+                        }
+                        alert('证件照片上传成功');
+                    } else {
+                        alert(data.msg || '上传失败');
+                    }
+                })
+                .catch(() => {
+                    alert('上传失败，请稍后再试');
+                });
+        });
+    }
+</script>
+</body>
+</html>

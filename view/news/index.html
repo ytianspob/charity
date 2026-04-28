@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>国开社区公益 - 新闻案例</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        .top-bar { background-color: #111827; color: white; padding: 0.5rem 1.5rem; }
+        .top-bar-content {
+            max-width: 1280px; margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;
+        }
+        .top-bar-text { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; }
+        .top-bar-actions { display: flex; gap: 1rem; align-items: center; }
+        .top-bar-actions a { font-size: 0.875rem; text-decoration: none; }
+        .login { color: #60a5fa; }
+        .register { color: #f87171; }
+        .username { color: #fbbf24; }
+        .logout { color: #9ca3af; }
+
+        nav {
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: sticky; top: 0; z-index: 50;
+        }
+        .nav-content {
+            max-width: 1280px; margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 1rem;
+        }
+        .logo { display: flex; align-items: center; gap: 0.5rem; }
+        .logo-icon {
+            background-color: #ef4444;
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .logo-text { font-size: 1.125rem; color: #1f2937; }
+        .nav-menu { display: flex; align-items: center; gap: 2rem; list-style: none; }
+        .nav-menu a { text-decoration: none; color: #4b5563; transition: color 0.2s; }
+        .nav-menu a:hover, .nav-menu a.active { color: #ef4444; }
+        .nav-contact { display: flex; align-items: center; gap: 0.5rem; }
+        .contact-icon {
+            background-color: #ef4444;
+            border-radius: 50%; padding: 0.5rem;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .contact-text .label { font-size: 0.75rem; color: #ef4444; }
+        .contact-text .phone { color: #1f2937; }
+
+        .relative { position: relative; }
+        .h-52 { height: 13rem; }
+        .overflow-hidden { overflow: hidden; }
+
+        .bg-gray-50 { background-color: #f9fafb; }
+        .bg-white { background-color: #ffffff; }
+        .bg-gradient-to-r { background-image: linear-gradient(to right, #ec4899, #ef4444); }
+        .text-white { color: #ffffff; }
+        .text-gray-800 { color: #1f2937; }
+        .text-gray-600 { color: #4b5563; }
+        .text-gray-500 { color: #6b7280; }
+
+        .rounded-lg { border-radius: 0.5rem; }
+        .rounded-full { border-radius: 9999px; }
+
+        .shadow-md { box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .hover-shadow-lg:hover { box-shadow: 0 10px 15px rgba(0,0,0,0.2); }
+
+        .max-w-4xl { max-width: 56rem; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .px-8 { padding-left: 2rem; padding-right: 2rem; }
+        .py-6 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+        .pt-8 { padding-top: 2rem; }
+        .pb-4 { padding-bottom: 1rem; }
+        .py-12 { padding-top: 3rem; padding-bottom: 3rem; }
+        .mt-12 { margin-top: 3rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .space-y-8 > * + * { margin-top: 2rem; }
+
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .justify-center { justify-content: center; }
+        .gap-2 { column-gap: 0.5rem; }
+        .w-9 { width: 2.25rem; }
+        .h-9 { height: 2.25rem; }
+
+        .badge {
+            display:inline-block;
+            padding:2px 8px;
+            border-radius:999px;
+            font-size:12px;
+            margin-bottom:4px;
+            color:#fff;
+        }
+        .badge-case { background:#ec4899; }
+        .badge-notice { background:#3b82f6; }
+        .badge-other { background:#6b7280; }
+
+        footer {
+            background-color: #111827;
+            color: #9ca3af;
+            padding: 3rem 0;
+        }
+        .footer-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .footer-column h4 { color: white; margin-bottom: 1rem; }
+        .footer-column ul { list-style: none; }
+        .footer-column ul li { margin-bottom: 0.5rem; }
+        .footer-column a {
+            color: #9ca3af;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer-column a:hover { color: white; }
+        .footer-contact { display: flex; flex-direction: column; gap: 0.75rem; }
+        .footer-contact-item { display: flex; align-items: center; gap: 0.5rem; }
+        .footer-bottom {
+            padding-top: 2rem;
+            border-top: 1px solid #374151;
+            text-align: center;
+            font-size: 0.875rem;
+        }
+        .footer-bottom .red { color: #ef4444; }
+        .icon { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .icon-sm { width: 16px; height: 16px; }
+
+        @media (max-width: 768px) {
+            .nav-menu { gap: 1rem; font-size: 0.875rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <div class="top-bar-text">
+                <span>邻里有难我在场，社区公益一起帮</span>
+            </div>
+            <div class="top-bar-actions">
+                <?php
+                $userId   = \think\facade\Session::get('user_id');
+                $username = \think\facade\Session::get('username');
+                ?>
+                <?php if (!empty($userId)): ?>
+                    <span class="username">你好，<?php echo htmlspecialchars($username); ?></span>
+                    <a href="/user/logout" class="logout">退出</a>
+                <?php else: ?>
+                    <a href="/user/login" class="login">登录</a>
+                    <a href="/user/register" class="register">注册</a> 
+                <?php endif; ?>
+                <a href="/dashboard/index" style="color: #ffffff;">用户中心</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg class="icon" style="color: white; fill: white;">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                </div>
+                <div class="logo-text">国开社区公益</div>
+            </div>
+
+            <ul class="nav-menu">
+                <li><a href="/">主页</a></li>
+                <li><a href="/about/index">关于我们</a></li>
+                <li><a href="/project/index">公益广场</a></li>
+                <li><a href="/help/index">求助中心</a></li>
+                <li><a href="/news/index" class="active">新闻案例</a></li>
+                <li><a href="/contact/index">联系我们</a></li>
+            </ul>
+
+            <div class="nav-contact">
+                <div class="contact-icon">
+                    <svg class="icon icon-sm" style="color: white;" width="26" height="26" viewBox="0 0 24 24">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>
+                </div>
+                <div class="contact-text">
+                    <div class="label">联系我们</div>
+                    <div class="phone">400-888-888</div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 横幅区域 -->
+    <div class="relative h-52 overflow-hidden">
+        <img 
+            src="https://images.unsplash.com/photo-1727857934741-93f20b9ffe71?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
+            alt="最新活动横幅"
+            class="w-full h-full object-cover"
+            style="width:100%;height:100%;object-fit:cover;"
+            onerror="this.style.backgroundColor='#333'"
+        />
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:flex-start;padding-left:8rem;background:rgba(0,0,0,0.3);">
+            <h1 style="color:#fff;font-size:2.25rem;font-weight:700;text-shadow:2px 2px 4px rgba(0,0,0,0.5);">新闻案例</h1>
+        </div>
+    </div>
+
+    <!-- 主内容区 -->
+    <main class="flex-1 bg-gray-50 py-12">
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="space-y-8">
+                <?php if (!empty($list)): ?>
+                    <?php foreach ($list as $item): ?>
+                        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                            <div class="px-8 pt-8 pb-4">
+                                <?php
+                                $cat = $item['category'] ?? '';
+                                $catLabel = '其他';
+                                $catClass = 'badge-other';
+                                if ($cat === 'case') {
+                                    $catLabel = '成功案例';
+                                    $catClass = 'badge-case';
+                                } elseif ($cat === 'notice') {
+                                    $catLabel = '平台公告';
+                                    $catClass = 'badge-notice';
+                                }
+                                ?>
+                                <span class="badge <?php echo $catClass; ?>"><?php echo $catLabel; ?></span>
+                                <h2 class="text-gray-800 text-lg leading-relaxed" style="margin-top:4px;">
+                                    <b><?php echo htmlspecialchars($item['title']); ?></b>
+                                </h2>
+                            </div>
+
+                            <?php
+                                $defaultCover = 'https://images.unsplash.com/photo-1593113702251-272b1bc414a9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg';
+                                $cover = isset($item['cover']) && $item['cover'] ? $item['cover'] : $defaultCover;
+                            ?>
+                            <div style="height:14rem;">
+                                <img
+                                    src="<?php echo htmlspecialchars($cover); ?>"
+                                    alt="新闻封面"
+                                    class="w-full h-full object-cover"
+                                    style="width:100%;height:100%;object-fit:cover;"
+                                    onerror="this.src='<?php echo $defaultCover; ?>';"
+                                />
+                            </div>
+
+                            <div class="px-8 py-6">
+                                <div class="text-sm text-gray-500 mb-4">
+                                    发布时间：<?php echo $item['create_time']; ?>
+                                </div>
+                                <p class="text-gray-600 leading-relaxed mb-6">
+                                    <?php
+                                    $summary = $item['summary'] ?: $item['content'];
+                                    $summary = strip_tags($summary);
+                                    if (mb_strlen($summary, 'UTF-8') > 120) {
+                                        echo htmlspecialchars(mb_substr($summary, 0, 120, 'UTF-8')) . '...';
+                                    } else {
+                                        echo htmlspecialchars($summary);
+                                    }
+                                    ?>
+                                </p>
+                                <a
+                                    href="/news/detail?id=<?php echo $item['id']; ?>"
+                                    class="bg-gradient-to-r text-white px-8 py-2 rounded-full hover-shadow-lg"
+                                    style="display:inline-block;text-decoration:none;border:none;cursor:pointer;"
+                                >
+                                    查看详情
+                                </a>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p style="text-align:center;color:#6b7280;">暂无新闻案例内容。</p>
+                <?php endif; ?>
+            </div>
+
+            <!-- 分页 -->
+            <?php if (!empty($totalPages) && $totalPages > 1): ?>
+                <div class="flex justify-center mt-12">
+                    <div class="flex gap-2">
+                        <?php
+                        $baseUrl = '/news/index';
+                        $queryBase = [];
+                        if (!empty($category)) {
+                            $queryBase['category'] = $category;
+                        }
+                        function buildNewsUrl($base, $params) {
+                            $q = http_build_query($params);
+                            return $base . ($q ? ('?' . $q) : '');
+                        }
+                        ?>
+
+                        <?php if ($page > 1): ?>
+                            <?php
+                            $prevParams = $queryBase;
+                            $prevParams['page'] = $page - 1;
+                            ?>
+                            <button
+                                onclick="window.location.href='<?php echo buildNewsUrl($baseUrl, $prevParams); ?>'"
+                                class="w-9 h-9 rounded-full bg-white text-gray-600 flex items-center justify-center shadow-md hover-shadow-lg"
+                                style="border:none;cursor:pointer;font-weight:500;"
+                            >&lt;</button>
+                        <?php endif; ?>
+
+                        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                            <?php
+                            $pParams = $queryBase;
+                            $pParams['page'] = $i;
+                            $isCurrent = ($i == $page);
+                            ?>
+                            <button
+                                onclick="window.location.href='<?php echo buildNewsUrl($baseUrl, $pParams); ?>'"
+                                class="w-9 h-9 rounded-full <?php echo $isCurrent ? 'bg-gradient-to-r text-white' : 'bg-white text-gray-600'; ?> flex items-center justify-center shadow-md hover-shadow-lg"
+                                style="border:none;cursor:pointer;font-weight:500;"
+                            >
+                                <?php echo $i; ?>
+                            </button>
+                        <?php endfor; ?>
+
+                        <?php if ($page < $totalPages): ?>
+                            <?php
+                            $nextParams = $queryBase;
+                            $nextParams['page'] = $page + 1;
+                            ?>
+                            <button
+                                onclick="window.location.href='<?php echo buildNewsUrl($baseUrl, $nextParams); ?>'"
+                                class="w-9 h-9 rounded-full bg-white text-gray-600 flex items-center justify-center shadow-md hover-shadow-lg"
+                                style="border:none;cursor:pointer;font-weight:500;"
+                            >&gt;</button>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            <?php endif; ?>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h4>友情链接</h4>
+                    <ul>
+                        <li><a href="https://www.baidufoundation.org.cn/">百度基金会</a></li>
+                        <li><a href="https://gongyi.qq.com/">腾讯公益</a></li>
+                        <li><a href="https://www.antfoundation.org.cn/">浙江蚂蚁公益基金会</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>便捷通道</h4>
+                    <ul>
+                        <li><a href="/news/index?category=notice">平台公告</a></li>
+                        <li><a href="/help/index">求助信息</a></li>
+                        <li><a href="/project/index">公益项目</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>我要反馈</h4>
+                    <ul>
+                        <li>
+                            <p>
+                                这里是国开社区公益平台，在这里你可以寻求帮助，也可以我们帮助他人。如果你有任何意见，欢迎联系我们。
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>联系我们</h4>
+                    <div class="footer-contact">
+                        <div class="footer-contact-item">
+                            <svg class="icon icon-sm" width="26" height="26" viewBox="0 0 24 24">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                            </svg>
+                            <span>电话：400-888-888</span>
+                        </div>
+                        <div class="footer-contact-item">
+                            <svg class="icon icon-sm" width="26" height="26" viewBox="0 0 24 24">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                            <span>邮箱：admin@admin.com</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>
+                    © 版权所有 <span class="red">国开社区公益</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

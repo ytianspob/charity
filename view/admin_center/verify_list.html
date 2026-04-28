@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>管理员中心 - 认证审核</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Roboto','Oxygen','Ubuntu','Cantarell','Fira Sans','Droid Sans','Helvetica Neue',sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+<div class="min-h-screen bg-gray-100">
+    <div class="flex flex-col md:flex-row min-h-screen">
+
+        <!-- 左侧导航：仅 md 及以上显示 -->
+        <aside class="hidden md:flex w-[240px] bg-gray-900 text-white flex-col">
+            <div class="p-6 border-b border-white/10">
+                <h2 class="text-xl font-semibold">管理员中心</h2>
+                <p class="text-xs text-white/60 mt-1">国开社区公益</p>
+            </div>
+
+            <?php
+            $adminName = $admin ? ($admin->nickname ?: $admin->username) : '管理员';
+            ?>
+
+            <div class="px-4 py-4 border-b border-white/10">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-gray-700 font-semibold">
+                        <?php echo mb_substr($adminName,0,1,'UTF-8'); ?>
+                    </div>
+                    <div>
+                        <div class="font-medium">
+                            <?php echo htmlspecialchars($adminName); ?>
+                        </div>
+                        <div class="text-xs text-emerald-300">超级管理员</div>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="flex-1 py-4 text-sm">
+                <div class="px-4 mb-3 text-xs text-white/40">导航菜单</div>
+
+                <a href="/adminCenter/index"
+                   class="w-full flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 border-l-4 border-transparent">
+                    <span>📊</span><span>仪表盘</span>
+                </a>
+
+                <a href="/adminCenter/userList"
+                   class="w-full flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 border-l-4 border-transparent">
+                    <span>👥</span><span>用户管理</span>
+                </a>
+
+                <a href="/adminCenter/verifyList"
+                   class="w-full flex items-center gap-3 px-4 py-3 bg-white/10 text-white border-l-4 border-white">
+                    <span>✅</span><span>认证审核</span>
+                </a>
+
+                <a href="/adminCenter/projectAudit"
+                   class="w-full flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 border-l-4 border-transparent">
+                    <span>📌</span><span>项目审核</span>
+                </a>
+
+                <a href="/adminCenter/projectList"
+                   class="w-full flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 border-l-4 border-transparent">
+                    <span>📂</span><span>项目管理</span>
+                </a>
+
+                <a href="/adminCenter/signupManage"
+                   class="w-full flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 border-l-4 border-transparent">
+                    <span>🤝</span><span>参与管理</span>
+                </a>
+
+                <a href="/adminCenter/donationList"
+                   class="w-full flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 border-l-4 border-transparent">
+                    <span>💝</span><span>捐赠管理</span>
+                </a>
+
+                <a href="/adminCenter/helpList"
+                   class="w-full flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 border-l-4 border-transparent">
+                    <span>🆘</span><span>求助管理</span>
+                </a>
+
+                <a href="/adminCenter/commentList"
+                   class="w-full flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 border-l-4 border-transparent">
+                    <span>💬</span><span>评论管理</span>
+                </a>
+
+                <a href="/adminCenter/newsList"
+                   class="w-full flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 border-l-4 border-transparent">
+                    <span>📰</span><span>新闻管理</span>
+                </a>
+
+                <a href="/adminCenter/feedbackList"
+                   class="w-full flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-white/5 border-l-4 border-transparent">
+                    <span>📨</span><span>反馈管理</span>
+                </a>
+            </nav>
+
+            <div class="p-4">
+                <a href="/user/logout"
+                   class="w-full bg-[#e74c3c] hover:bg-[#c0392b] text-white rounded-full py-2 px-4 flex items-center justify-center gap-2 transition-colors">
+                    <span>⏏</span><span>退出登录</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- 右侧内容 -->
+        <div class="flex-1 flex flex-col">
+            <!-- 顶部栏：含移动端菜单 -->
+            <header class="bg-gray-900 text-white px-4 md:px-6 py-3 flex items-center justify-between md:justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <button id="admin-mobile-menu-toggle"
+                            type="button"
+                            class="md:hidden inline-flex items-center justify-center w-9 h-9 rounded-full hover:bg-white/10 focus:outline-none">
+                        ☰
+                    </button>
+                    <h1 class="text-lg font-semibold flex items-center gap-2">
+                        <span>✅</span><span>认证审核</span>
+                    </h1>
+                </div>
+                <div class="text-sm">
+                    管理员：<?php echo htmlspecialchars($adminName); ?>
+                </div>
+            </header>
+
+            <!-- 移动端下拉菜单 -->
+            <nav id="admin-mobile-menu"
+                 class="md:hidden hidden bg-gray-900 text-white text-sm border-b border-gray-800">
+                <div class="px-4 py-3 border-t border-gray-800 flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-full bg-gray-300 flex items-center justify-center text-gray-700 font-semibold">
+                        <?php echo mb_substr($adminName,0,1,'UTF-8'); ?>
+                    </div>
+                    <div>
+                        <div class="font-medium text-sm">
+                            <?php echo htmlspecialchars($adminName); ?>
+                        </div>
+                        <div class="text-[11px] text-emerald-300">超级管理员</div>
+                    </div>
+                </div>
+
+                <div class="py-2 text-sm">
+                    <div class="px-4 mb-2 mt-1 text-xs text-white/40">导航菜单</div>
+
+                    <a href="/adminCenter/index"
+                       class="flex items-center gap-3 px-4 py-2 text-white/70 hover:bg-white/5 border-l-4 border-transparent">
+                        <span>📊</span><span>仪表盘</span>
+                    </a>
+                    <a href="/adminCenter/userList"
+                       class="flex items-center gap-3 px-4 py-2 text-white/70 hover:bg-white/5 border-l-4 border-transparent">
+                        <span>👥</span><span>用户管理</span>
+                    </a>
+                    <a href="/adminCenter/verifyList"
+                       class="flex items-center gap-3 px-4 py-2 bg-white/10 text-white border-l-4 border-white">
+                        <span>✅</span><span>认证审核</span>
+                    </a>
+                    <a href="/adminCenter/projectAudit"
+                       class="flex items-center gap-3 px-4 py-2 text-white/70 hover:bg-white/5 border-l-4 border-transparent">
+                        <span>📌</span><span>项目审核</span>
+                    </a>
+                    <a href="/adminCenter/projectList"
+                       class="flex items-center gap-3 px-4 py-2 text-white/70 hover:bg-white/5 border-l-4 border-transparent">
+                        <span>📂</span><span>项目管理</span>
+                    </a>
+                    <a href="/adminCenter/signupManage"
+                       class="flex items-center gap-3 px-4 py-2 text-white/70 hover:bg-white/5 border-l-4 border-transparent">
+                        <span>🤝</span><span>参与管理</span>
+                    </a>
+                    <a href="/adminCenter/donationList"
+                       class="flex items-center gap-3 px-4 py-2 text-white/70 hover:bg-white/5 border-l-4 border-transparent">
+                        <span>💝</span><span>捐赠管理</span>
+                    </a>
+                    <a href="/adminCenter/helpList"
+                       class="flex items-center gap-3 px-4 py-2 text-white/70 hover:bg-white/5 border-l-4 border-transparent">
+                        <span>🆘</span><span>求助管理</span>
+                    </a>
+                    <a href="/adminCenter/commentList"
+                       class="flex items-center gap-3 px-4 py-2 text-white/70 hover:bg-white/5 border-l-4 border-transparent">
+                        <span>💬</span><span>评论管理</span>
+                    </a>
+                    <a href="/adminCenter/newsList"
+                       class="flex items-center gap-3 px-4 py-2 text-white/70 hover:bg-white/5 border-l-4 border-transparent">
+                        <span>📰</span><span>新闻管理</span>
+                    </a>
+                    <a href="/adminCenter/feedbackList"
+                       class="flex items-center gap-3 px-4 py-2 text-white/70 hover:bg-white/5 border-l-4 border-transparent">
+                        <span>📨</span><span>反馈管理</span>
+                    </a>
+
+                    <div class="px-4 py-3">
+                        <a href="/user/logout"
+                           class="w-full bg-[#e74c3c] hover:bg-[#c0392b] text-white rounded-full py-2 px-4 flex items-center justify-center gap-2 transition-colors text-xs">
+                            <span>⏏</span><span>退出登录</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+
+            <main class="flex-1 p-4 md:p-6 space-y-4">
+                <!-- 搜索栏 -->
+                <div class="bg-white rounded-lg shadow p-4">
+                    <form method="get" action="/adminCenter/verifyList" class="flex flex-col sm:flex-row gap-3 sm:items-center">
+                        <div class="text-sm text-gray-700">
+                            待审核认证：<span class="font-semibold"><?php echo (int)($total ?? 0); ?></span> 个
+                        </div>
+                        <div class="flex-1"></div>
+                        <div class="flex items-center gap-2">
+                            <input type="text" name="keyword"
+                                   value="<?php echo htmlspecialchars($keyword ?? ''); ?>"
+                                   placeholder="用户名 / 昵称"
+                                   class="border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <button type="submit"
+                                    class="px-3 py-1.5 rounded bg-indigo-600 text-xs text-white hover:bg-indigo-700">
+                                搜索
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- 列表 -->
+                <div class="bg-white rounded-lg shadow p-4">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm align-top">
+                            <thead>
+                            <tr class="border-b">
+                                <th class="py-2 px-2 text-left text-xs font-semibold text-gray-500">ID</th>
+                                <th class="py-2 px-2 text-left text-xs font-semibold text-gray-500">用户</th>
+                                <th class="py-2 px-2 text-left text-xs font-semibold text-gray-500">认证说明</th>
+                                <th class="py-2 px-2 text-left text-xs font-semibold text-gray-500">证件照片</th>
+                                <th class="py-2 px-2 text-left text-xs font-semibold text-gray-500">提交时间</th>
+                                <th class="py-2 px-2 text-left text-xs font-semibold text-gray-500">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php if (!empty($list)): ?>
+                                <?php foreach ($list as $u): ?>
+                                    <tr class="border-b last:border-b-0">
+                                        <td class="py-2 px-2 whitespace-nowrap text-gray-700">
+                                            <?php echo (int)$u->id; ?>
+                                        </td>
+                                        <td class="py-2 px-2 whitespace-nowrap">
+                                            <div class="text-sm text-gray-800">
+                                                <?php echo htmlspecialchars($u->username); ?>
+                                            </div>
+                                            <div class="text-xs text-gray-500">
+                                                <?php echo htmlspecialchars($u->nickname ?: '—'); ?>
+                                            </div>
+                                        </td>
+                                        <td class="py-2 px-2">
+                                            <div class="max-w-xs text-xs text-gray-700 whitespace-pre-wrap">
+                                                <?php echo nl2br(htmlspecialchars($u->verify_reason ?? '')); ?>
+                                            </div>
+                                        </td>
+                                        <td class="py-2 px-2">
+                                            <?php if (!empty($u->verify_image)): ?>
+                                                <a href="<?php echo htmlspecialchars($u->verify_image); ?>" target="_blank"
+                                                   class="block w-28 h-20 border border-gray-200 rounded overflow-hidden bg-gray-50">
+                                                    <img src="<?php echo htmlspecialchars($u->verify_image); ?>"
+                                                         alt="证件照片"
+                                                         class="w-full h-full object-cover">
+                                                </a>
+                                            <?php else: ?>
+                                                <span class="text-xs text-gray-400">未上传</span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td class="py-2 px-2 whitespace-nowrap text-xs text-gray-500">
+                                            <?php echo $u->update_time ?? $u->create_time ?? ''; ?>
+                                        </td>
+                                        <td class="py-2 px-2 whitespace-nowrap text-xs">
+                                            <!-- 通过 -->
+                                            <form method="post" action="/adminCenter/handleVerify" class="inline">
+                                                <input type="hidden" name="user_id" value="<?php echo (int)$u->id; ?>">
+                                                <input type="hidden" name="action" value="approve">
+                                                <button type="submit"
+                                                        class="px-2 py-1 rounded bg-emerald-600 text-white text-xs hover:bg-emerald-700 mb-1">
+                                                    通过
+                                                </button>
+                                            </form>
+                                            <!-- 拒绝 -->
+                                            <form method="post" action="/adminCenter/handleVerify" class="mt-1">
+                                                <input type="hidden" name="user_id" value="<?php echo (int)$u->id; ?>">
+                                                <input type="hidden" name="action" value="reject">
+                                                <input type="text" name="reject_reason"
+                                                       placeholder="可填写拒绝原因"
+                                                       class="border border-gray-300 rounded px-2 py-1 text-xs mb-1 w-40">
+                                                <button type="submit"
+                                                        class="px-2 py-1 rounded bg-red-600 text-white text-xs hover:bg-red-700">
+                                                    拒绝
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="6" class="py-4 text-center text-gray-500">
+                                        暂无待审核的认证申请。
+                                    </td>
+                                </tr>
+                            <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 分页 -->
+                    <?php if (!empty($totalPages) && $totalPages > 1): ?>
+                        <div class="mt-4 flex justify-center items-center gap-2">
+                            <?php
+                            function build_admin_verify_url($p, $keyword){
+                                $k = $keyword ? '&keyword='.urlencode($keyword) : '';
+                                return '/adminCenter/verifyList?page='.$p.$k;
+                            }
+                            ?>
+
+                            <?php if ($page > 1): ?>
+                                <a href="<?php echo build_admin_verify_url($page-1, $keyword ?? ''); ?>"
+                                   class="px-3 py-1 border rounded text-xs hover:bg-gray-50">
+                                    上一页
+                                </a>
+                            <?php endif; ?>
+
+                            <?php for ($i=1;$i<=$totalPages;$i++): ?>
+                                <a href="<?php echo build_admin_verify_url($i, $keyword ?? ''); ?>"
+                                   class="px-3 py-1 border rounded text-xs <?php echo $i==$page?'bg-gray-900 text-white border-gray-900':'hover:bg-gray-50'; ?>">
+                                    <?php echo $i; ?>
+                                </a>
+                            <?php endfor; ?>
+
+                            <?php if ($page < $totalPages): ?>
+                                <a href="<?php echo build_admin_verify_url($page+1, $keyword ?? ''); ?>"
+                                   class="px-3 py-1 border rounded text-xs hover:bg-gray-50">
+                                    下一页
+                                </a>
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </main>
+
+            <footer class="p-4 text-center text-sm text-gray-500">
+                © 管理后台 国开社区公益
+            </footer>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        const toggle = document.getElementById('admin-mobile-menu-toggle');
+        const menu = document.getElementById('admin-mobile-menu');
+        if (!toggle || !menu) return;
+
+        toggle.addEventListener('click', function (e) {
+            e.stopPropagation();
+            menu.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', function () {
+            menu.classList.add('hidden');
+        });
+
+        menu.addEventListener('click', function (e) {
+            e.stopPropagation();
+        });
+    })();
+</script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>站内信 - 国开社区公益</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+<div class="min-h-screen max-w-5xl mx-auto p-4 sm:p-6 space-y-4">
+    <header class="flex items-center justify-between">
+    <h1 class="text-lg font-semibold text-gray-800">站内信</h1>
+    <div class="flex items-center gap-2">
+        <a href="/dashboard/index"
+           class="px-3 py-1.5 rounded bg-gray-500 text-xs text-white hover:bg-gray-600">
+            返回后台
+        </a>
+        <a href="/message/compose"
+           class="px-3 py-1.5 rounded bg-[#6b5b95] text-xs text-white hover:bg-[#5a4a7f]">
+            写新消息
+        </a>
+    </div>
+</header>
+
+    <!-- Tab 切换 -->
+    <div class="bg-white rounded-lg shadow">
+        <div class="border-b flex">
+            <button id="tab-inbox"
+                    class="flex-1 px-4 py-2 text-sm font-medium text-center border-b-2 border-[#6b5b95] text-[#6b5b95]">
+                收到的消息
+            </button>
+            <button id="tab-sent"
+                    class="flex-1 px-4 py-2 text-sm font-medium text-center border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                我发送的
+            </button>
+        </div>
+
+        <!-- 收到的 -->
+        <div id="panel-inbox" class="p-4 sm:p-5">
+            <table class="w-full text-sm">
+                <thead>
+                <tr class="border-b">
+                    <th class="py-2 px-3 text-left text-xs text-gray-500">类型</th>
+                    <th class="py-2 px-3 text-left text-xs text-gray-500">来自</th>
+                    <th class="py-2 px-3 text-left text-xs text-gray-500">标题 / 内容</th>
+                    <th class="py-2 px-3 text-left text-xs text-gray-500">时间</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php if (!empty($inbox)): ?>
+                    <?php foreach ($inbox as $m): ?>
+                        <?php
+                        $isUnread = ((int)$m->is_read === 0);
+                        $sender = $m->sender_id > 0 ? ($userMap[(int)$m->sender_id] ?? null) : null;
+                        $fromName = $m->type === 'system' || (int)$m->sender_id === 0
+                            ? '系统消息'
+                            : ($sender ? ($sender->nickname ?: $sender->username) : '用户已不存在');
+                        $typeLabel = $m->type === 'system' ? '系统' : '个人';
+                        $preview = $m->title ?: mb_substr(strip_tags((string)$m->content), 0, 30, 'UTF-8');
+                        ?>
+                        <tr class="border-b last:border-b-0 <?php echo $isUnread ? 'bg-indigo-50' : ''; ?>">
+                            <td class="py-2 px-3 text-xs text-gray-700">
+                                <?php echo $typeLabel; ?>
+                            </td>
+                            <td class="py-2 px-3 text-xs text-gray-700">
+                                <?php echo htmlspecialchars($fromName); ?>
+                            </td>
+                            <td class="py-2 px-3 text-xs">
+                                <a href="/message/detail?id=<?php echo (int)$m->id; ?>"
+                                   class="text-indigo-600 hover:text-indigo-800">
+                                    <?php echo htmlspecialchars($preview); ?>
+                                    <?php if ($isUnread): ?>
+                                        <span class="ml-1 inline-block w-2 h-2 rounded-full bg-red-500 align-middle"></span>
+                                    <?php endif; ?>
+                                </a>
+                            </td>
+                            <td class="py-2 px-3 text-xs text-gray-500 whitespace-nowrap">
+                                <?php echo $m->create_time ?? ''; ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr><td colspan="4" class="py-4 text-center text-gray-500">暂无收到的消息。</td></tr>
+                <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 我发送的 -->
+        <div id="panel-sent" class="p-4 sm:p-5 hidden">
+            <table class="w-full text-sm">
+                <thead>
+                <tr class="border-b">
+                    <th class="py-2 px-3 text-left text-xs text-gray-500">类型</th>
+                    <th class="py-2 px-3 text-left text-xs text-gray-500">发送给</th>
+                    <th class="py-2 px-3 text-left text-xs text-gray-500">标题 / 内容</th>
+                    <th class="py-2 px-3 text-left text-xs text-gray-500">时间</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php if (!empty($sent)): ?>
+                    <?php foreach ($sent as $m): ?>
+                        <?php
+                        $receiver = $m->receiver_id > 0 ? ($userMap[(int)$m->receiver_id] ?? null) : null;
+                        $toName = $receiver ? ($receiver->nickname ?: $receiver->username) : '用户已不存在';
+                        $typeLabel = $m->type === 'system' ? '系统' : '个人';
+                        $preview = $m->title ?: mb_substr(strip_tags((string)$m->content), 0, 30, 'UTF-8');
+                        ?>
+                        <tr class="border-b last:border-b-0">
+                            <td class="py-2 px-3 text-xs text-gray-700">
+                                <?php echo $typeLabel; ?>
+                            </td>
+                            <td class="py-2 px-3 text-xs text-gray-700">
+                                <?php echo htmlspecialchars($toName); ?>
+                            </td>
+                            <td class="py-2 px-3 text-xs">
+                                <a href="/message/detail?id=<?php echo (int)$m->id; ?>"
+                                   class="text-indigo-600 hover:text-indigo-800">
+                                    <?php echo htmlspecialchars($preview); ?>
+                                </a>
+                            </td>
+                            <td class="py-2 px-3 text-xs text-gray-500 whitespace-nowrap">
+                                <?php echo $m->create_time ?? ''; ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr><td colspan="4" class="py-4 text-center text-gray-500">暂无发送的消息。</td></tr>
+                <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    const tabInbox  = document.getElementById('tab-inbox');
+    const tabSent   = document.getElementById('tab-sent');
+    const panelInbox= document.getElementById('panel-inbox');
+    const panelSent = document.getElementById('panel-sent');
+
+    tabInbox.addEventListener('click', () => {
+        tabInbox.classList.add('border-[#6b5b95]', 'text-[#6b5b95]');
+        tabInbox.classList.remove('border-transparent', 'text-gray-500');
+        tabSent.classList.remove('border-[#6b5b95]', 'text-[#6b5b95]');
+        tabSent.classList.add('border-transparent', 'text-gray-500');
+
+        panelInbox.classList.remove('hidden');
+        panelSent.classList.add('hidden');
+    });
+
+    tabSent.addEventListener('click', () => {
+        tabSent.classList.add('border-[#6b5b95]', 'text-[#6b5b95]');
+        tabSent.classList.remove('border-transparent', 'text-gray-500');
+        tabInbox.classList.remove('border-[#6b5b95]', 'text-[#6b5b95]');
+        tabInbox.classList.add('border-transparent', 'text-gray-500');
+
+        panelSent.classList.remove('hidden');
+        panelInbox.classList.add('hidden');
+    });
+</script>
+</body>
+</html>

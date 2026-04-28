@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>发布求助 - 国开社区公益</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- wangEditor v4 -->
+    <script src="https://unpkg.com/wangeditor@4.7.15/dist/wangEditor.min.js"></script>
+</head>
+<body class="bg-gray-100">
+<div class="min-h-screen">
+    <header class="bg-[#6b5b95] text-white px-6 py-4 flex items-center justify-between">
+        <h1 class="text-lg font-semibold">发布求助</h1>
+        <a href="/userCenter/posts" class="text-sm underline hover:no-underline">返回我的发布</a>
+    </header>
+
+    <main class="max-w-3xl mx-auto p-4 sm:p-6">
+        <?php
+        $p = $post ?? ['id'=>0,'title'=>'','content'=>''];
+        ?>
+        <form method="post" action="/help/update" class="bg-white rounded-lg shadow p-4 sm:p-6 space-y-4">
+            <input type="hidden" name="id" value="<?php echo (int)$p['id']; ?>">
+
+            <!-- 标题 -->
+            <div>
+                <label class="block text-sm text-gray-700 mb-1">求助标题</label>
+                <input type="text" name="title"
+                       value="<?php echo htmlspecialchars($p['title']); ?>"
+                       class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#6b5b95]"
+                       required>
+            </div>
+
+            <!-- 内容（富文本） -->
+            <div>
+                <label class="block text-sm text-gray-700 mb-1">求助内容</label>
+                <div id="editor-toolbar" class="border border-gray-200 rounded-t px-2 py-1 bg-gray-50"></div>
+                <div id="editor" class="border border-gray-200 rounded-b min-h-[200px] bg-white"></div>
+
+                <!-- 隐藏 textarea 用于提交 -->
+                <textarea name="content" id="content-input" class="hidden"><?php echo htmlspecialchars($p['content']); ?></textarea>
+
+                <p class="mt-1 text-xs text-gray-500">
+                    可以输入文字、插入图片等富文本内容。
+                </p>
+            </div>
+
+            <!-- 按钮 -->
+            <div class="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-end pt-2">
+                <button type="submit" name="action" value="draft"
+                        class="px-4 py-2 rounded border border-gray-300 text-sm text-gray-700 hover:bg-gray-50">
+                    保存为草稿
+                </button>
+                <button type="submit" name="action" value="publish"
+                        class="px-4 py-2 rounded bg-[#6b5b95] text-sm text-white hover:bg-[#5a4a7f]">
+                    直接发布
+                </button>
+            </div>
+        </form>
+    </main>
+</div>
+
+<script>
+    const E = window.wangEditor;
+    const editor = new E('#editor-toolbar', '#editor');
+
+    // 上传图片接口
+    editor.config.uploadImgServer = '/help/uploadContentImage';
+    editor.config.uploadFileName = 'wangeditor-uploaded-image';
+    editor.config.uploadImgMaxSize = 5 * 1024 * 1024;
+    editor.config.uploadImgMaxLength = 10;
+    editor.config.uploadImgAccept = ['jpg', 'jpeg', 'png', 'gif'];
+
+    editor.config.menus = [
+        'head',
+        'bold',
+        'italic',
+        'underline',
+        'list',
+        'justify',
+        'image',
+        'link',
+        'undo',
+        'redo'
+    ];
+
+    const contentInput = document.getElementById('content-input');
+    editor.config.onchange = function (html) {
+        contentInput.value = html;
+    };
+
+    editor.create();
+
+    // 初始内容
+    if (contentInput.value) {
+        editor.txt.html(contentInput.value);
+    }
+</script>
+</body>
+</html>

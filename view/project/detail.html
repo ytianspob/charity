@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        国开社区公益 -
+        <?php echo !empty($project['title']) ? htmlspecialchars($project['title']) : '公益项目详情'; ?>
+    </title>
+<style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+        font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+        line-height:1.6;
+        color:#333;
+    }
+    .top-bar { background:#111827; color:#fff; padding:0.5rem 1.5rem; }
+    .top-bar-content {
+        max-width:1280px; margin:0 auto;
+        display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;
+    }
+    .top-bar-text { display:flex; align-items:center; gap:0.5rem; font-size:0.875rem; }
+    .top-bar-actions { display:flex; gap:1rem; align-items:center; }
+    .top-bar-actions a { font-size:0.875rem; text-decoration:none; }
+    .login { color:#60a5fa; }
+    .register { color:#f87171; }
+    .username { color:#fbbf24; }
+    .logout { color:#9ca3af; }
+
+    nav {
+        background:#fff;
+        box-shadow:0 1px 3px rgba(0,0,0,0.1);
+        position:sticky; top:0; z-index:50;
+    }
+    .nav-content {
+        max-width:1280px; margin:0 auto;
+        padding:1rem 1.5rem;
+        display:flex; justify-content:space-between; align-items:center;
+        flex-wrap:wrap; gap:1rem;
+    }
+    .logo { display:flex; align-items:center; gap:0.5rem; }
+    .logo-icon {
+        background:#ef4444;
+        border-radius:0.5rem;
+        padding:0.5rem;
+        display:flex; align-items:center; justify-content:center;
+    }
+    .logo-text { font-size:1.125rem; color:#1f2937; }
+    .nav-menu { display:flex; align-items:center; gap:2rem; list-style:none; }
+    .nav-menu a { text-decoration:none; color:#4b5563; transition:color 0.2s; }
+    .nav-menu a:hover, .nav-menu a.active { color:#ef4444; }
+    .nav-contact { display:flex; align-items:center; gap:0.5rem; }
+    .contact-icon {
+        background:#ef4444;
+        border-radius:50%;
+        padding:0.5rem;
+        display:flex; align-items:center; justify-content:center;
+    }
+    .contact-text .label { font-size:0.75rem; color:#ef4444; }
+    .contact-text .phone { color:#1f2937; }
+
+    .icon { width:24px; height:24px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .icon-sm { width:16px; height:16px; }
+
+    main {
+        max-width:1120px;
+        margin:0 auto;
+        padding:2rem 1.5rem 3rem;
+    }
+
+    .hero-image-wrap {
+        margin-bottom:1.5rem;
+        border-radius:0.75rem;
+        overflow:hidden;
+    }
+    .hero-image-wrap img {
+        width:100%;
+        height:320px;
+        object-fit:cover;
+        display:block;
+    }
+
+    .project-title {
+        font-size:1.8rem;
+        color:#111827;
+        margin-bottom:0.75rem;
+    }
+    .project-meta-top {
+        font-size:0.85rem;
+        color:#6b7280;
+        margin-bottom:1.25rem;
+    }
+
+    .project-content {
+        font-size:0.95rem;
+        color:#4b5563;
+        line-height:1.8;
+    }
+
+    .right-card {
+        background:#ffffff;
+        border-radius:0.75rem;
+        border:1px solid #e5e7eb;
+        padding:1.5rem;
+        font-size:0.9rem;
+        color:#374151;
+    }
+    .right-card-row {
+        margin-bottom:0.6rem;
+    }
+    .right-label {
+        display:inline-block;
+        color:#6b7280;
+        margin-right:0.25rem;
+    }
+    .right-value {
+        color:#111827;
+    }
+    .right-summary {
+        margin-top:0.35rem;
+        color:#4b5563;
+    }
+
+    .recommend-section {
+        margin-top:1.75rem;
+    }
+    .recommend-title {
+        font-size:1rem;
+        color:#111827;
+        margin-bottom:0.75rem;
+    }
+    .recommend-list {
+        display:flex;
+        flex-direction:column;
+        gap:0.7rem;
+    }
+    .recommend-item {
+        display:flex;
+        gap:0.6rem;
+        padding-bottom:0.6rem;
+        border-bottom:1px solid #f3f4f6;
+    }
+    .recommend-item:last-child {
+        border-bottom:none;
+    }
+    .recommend-cover {
+        width:4.5rem;
+        height:4.5rem;
+        border-radius:0.5rem;
+        overflow:hidden;
+        flex-shrink:0;
+    }
+    .recommend-cover img {
+        width:100%;
+        height:100%;
+        object-fit:cover;
+        display:block;
+    }
+    .recommend-main {
+        flex:1;
+        font-size:0.8rem;
+    }
+    .recommend-title-text {
+        color:#111827;
+        margin-bottom:0.2rem;
+        line-height:1.4;
+    }
+    .recommend-time {
+        color:#6b7280;
+        font-size:0.75rem;
+    }
+
+    .comment-title {
+        font-size:1.25rem;
+        margin:2rem 0 0.75rem;
+        color:#ec4899;
+    }
+    .comment-textarea {
+        width:100%;
+        border:1px solid #d1d5db;
+        border-radius:0.5rem;
+        padding:0.75rem 0.9rem;
+        font-size:0.95rem;
+        resize:vertical;
+        min-height:110px;
+        box-sizing:border-box;
+    }
+    .comment-textarea:focus {
+        outline:none;
+        border-color:#ec4899;
+    }
+    .comment-submit-wrap {
+        margin-top:0.75rem;
+        display:flex;
+        justify-content:flex-end;
+    }
+    .comment-submit-btn {
+        background-color:#ec4899;
+        color:#fff;
+        padding:0.45rem 1.4rem;
+        border-radius:999px;
+        border:none;
+        font-size:0.9rem;
+        cursor:pointer;
+    }
+    .comment-submit-btn:hover {
+        background-color:#db2777;
+    }
+
+    .comment-list {
+        margin-top:1.5rem;
+        border-top:1px solid #e5e7eb;
+        padding-top:1rem;
+    }
+    .comment-item {
+        display:flex;
+        gap:0.75rem;
+        margin-bottom:1rem;
+    }
+    .avatar-circle {
+        width:2.5rem;
+        height:2.5rem;
+        border-radius:50%;
+        overflow:hidden;
+        background:#f97316;
+        flex-shrink:0;
+    }
+    .avatar-circle img{
+        width:100%;
+        height:100%;
+        object-fit:cover;
+    }
+    .comment-main {
+        flex:1;
+    }
+    .comment-meta {
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        margin-bottom:0.25rem;
+    }
+    .comment-username {
+        font-size:0.95rem;
+        color:#111827;
+    }
+    .comment-time {
+        font-size:0.75rem;
+        color:#ec4899;
+    }
+    .comment-content {
+        font-size:0.95rem;
+        color:#374151;
+    }
+    .reply-button {
+        font-size:0.8rem;
+        color:#ec4899;
+        border:1px solid #ec4899;
+        padding:0.15rem 0.9rem;
+        border-radius:999px;
+        background:#fff;
+        cursor:pointer;
+    }
+    .reply-button:hover{
+        background:#ec4899;
+        color:#fff;
+    }
+    .reply-list {
+        margin-left:2.5rem;
+        margin-top:0.5rem;
+        border-left:2px solid #f3f4f6;
+        padding-left:0.75rem;
+    }
+    .reply-item{
+        margin-top:0.3rem;
+    }
+    .reply-form {
+        margin-left:2.5rem;
+        margin-top:0.5rem;
+    }
+    .reply-textarea{
+        width:100%;
+        border:1px solid #d1d5db;
+        border-radius:0.5rem;
+        padding:0.5rem 0.7rem;
+        font-size:0.9rem;
+        resize:vertical;
+        min-height:70px;
+        box-sizing:border-box;
+    }
+    .reply-textarea:focus{
+        outline:none;
+        border-color:#ec4899;
+    }
+    .reply-submit-wrap{
+        margin-top:0.4rem;
+        display:flex;
+        justify-content:flex-end;
+    }
+    .reply-submit-btn{
+        background-color:#ec4899;
+        color:#fff;
+        padding:0.35rem 1.1rem;
+        border-radius:999px;
+        border:none;
+        font-size:0.8rem;
+        cursor:pointer;
+    }
+    .reply-submit-btn:hover{
+        background-color:#db2777;
+    }
+
+.comment-verified-badge {
+    display:inline-flex;
+    align-items:center;
+    gap:2px;
+    margin-left:4px;
+    padding:0 6px;
+    border-radius:999px;
+    background:#ecfdf5;
+    color:#16a34a;
+    font-size:0.7rem;
+}
+.comment-verified-badge-icon {
+    width:12px;
+    height:12px;
+    border-radius:999px;
+    background:linear-gradient(to bottom right,#22c55e,#16a34a);
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    color:#ffffff;
+    font-size:9px;
+    line-height:1;
+}
+
+    footer {
+        background:#111827;
+        color:#9ca3af;
+        padding:3rem 0;
+    }
+    .footer-content {
+        max-width:1280px;
+        margin:0 auto;
+        padding:0 1.5rem;
+    }
+    .footer-grid {
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+        gap:2rem;
+        margin-bottom:2rem;
+    }
+    .footer-column h4 { color:#fff; margin-bottom:1rem; }
+    .footer-column ul { list-style:none; }
+    .footer-column ul li { margin-bottom:0.5rem; }
+    .footer-column a {
+        color:#9ca3af;
+        text-decoration:none;
+        transition:color 0.2s;
+    }
+    .footer-column a:hover { color:#fff; }
+    .footer-contact { display:flex; flex-direction:column; gap:0.75rem; }
+    .footer-contact-item { display:flex; align-items:center; gap:0.5rem; }
+    .footer-bottom {
+        padding-top:2rem;
+        border-top:1px solid #374151;
+        text-align:center;
+        font-size:0.875rem;
+    }
+    .footer-bottom .red { color:#ef4444; }
+
+    /* ===== 关键布局：PC 和 手机不同顺序 ===== */
+
+    /* 三个区域：头图+标题、右侧栏、正文评论 */
+    .detail-grid {
+        display:grid;
+        grid-template-columns: minmax(0,2fr) minmax(0,1fr);
+        grid-template-areas:
+            "hero   right"
+            "main   right";
+        gap:2rem;
+    }
+
+    .block-hero  { grid-area: hero; }
+    .block-right { grid-area: right; }
+    .block-main  { grid-area: main; }
+
+    /* 手机：一列，按 DOM 顺序 hero -> right -> main */
+    @media (max-width:960px){
+        .detail-grid {
+            grid-template-columns:1fr;
+            grid-template-areas:
+                "hero"
+                "right"
+                "main";
+        }
+    }
+</style>
+
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <div class="top-bar-text">
+                <span>邻里有难我在场，社区公益一起帮</span>
+            </div>
+            <div class="top-bar-actions">
+                <?php
+                $userId   = \think\facade\Session::get('user_id');
+                $username = \think\facade\Session::get('username');
+                ?>
+                <?php if (!empty($userId)): ?>
+                    <span class="username">你好，<?php echo htmlspecialchars($username); ?></span>
+                    <a href="/user/logout" class="logout">退出</a>
+                <?php else: ?>
+                    <a href="/user/login" class="login">登录</a>
+                    <a href="/user/register" class="register">注册</a>
+                <?php endif; ?>
+                <a href="/dashboard/index" style="color:#ffffff;">用户中心</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg class="icon" style="color: white; fill: white;">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                </div>
+                <div class="logo-text">国开社区公益</div>
+            </div>
+
+            <ul class="nav-menu">
+                <li><a href="/">主页</a></li>
+                <li><a href="/about/index">关于我们</a></li>
+                <li><a href="/project/index" class="active">公益广场</a></li>
+                <li><a href="/help/index">求助中心</a></li>
+                <li><a href="/news/index">新闻案例</a></li>
+                <li><a href="/contact/index">联系我们</a></li>
+            </ul>
+
+            <div class="nav-contact">
+                <div class="contact-icon">
+                    <svg class="icon icon-sm" style="color: white;" width="26" height="26" viewBox="0 0 24 24">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>
+                </div>
+                <div class="contact-text">
+                    <div class="label">联系我们</div>
+                    <div class="phone">400-888-888</div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <?php if (!empty($project)): ?>
+            <?php
+            $projectDefaultCover = 'https://images.unsplash.com/photo-1599456671475-da8c5b91e52c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080';
+            $projectCover = !empty($project['cover']) ? $project['cover'] : $projectDefaultCover;
+
+            $publisher = $publisherName ?? '匿名组织';
+            $location  = $project['location'] ?? '未填写';
+            $endTime   = $project['end_time'] ?? '长期有效';
+            $summary   = $project['summary'] ?? '';
+            ?>
+
+            <div class="detail-grid">
+                <!-- block-hero：封面 + 标题 + 时间 + 发起人 -->
+                <section class="block-hero">
+                    <div class="hero-image-wrap">
+                        <img
+                            src="<?php echo htmlspecialchars($projectCover); ?>"
+                            alt="<?php echo htmlspecialchars($project['title']); ?>"
+                            onerror="this.src='<?php echo $projectDefaultCover; ?>';"
+                        />
+                    </div>
+
+                    <h1 class="project-title">
+                        <?php echo htmlspecialchars($project['title']); ?>
+                    </h1>
+                    <div class="project-meta-top">
+                        发布时间：<?php echo $project['create_time']; ?>
+                        &nbsp;&nbsp;发起人/组织：<?php echo htmlspecialchars($publisher); ?>
+                    </div>
+                </section>
+
+                <!-- block-right：项目卡片 + 报名 + 捐赠 + 推荐 -->
+                <aside class="block-right">
+<?php
+$donateMsg    = \think\facade\Session::get('donate_msg');
+$donateStatus = \think\facade\Session::get('donate_status'); // success / error
+?>
+<?php if (!empty($donateMsg)): ?>
+    <div style="
+        margin-top:1rem;
+        padding:0.6rem 0.9rem;
+        border-radius:0.5rem;
+        font-size:0.85rem;
+        <?php if ($donateStatus === 'success'): ?>
+            background:#ecfdf3;color:#166534;border:1px solid #bbf7d0;
+        <?php else: ?>
+            background:#fef2f2;color:#991b1b;border:1px solid #fecaca;
+        <?php endif; ?>
+    ">
+        <?php echo htmlspecialchars($donateMsg); ?>
+    </div>
+<?php endif; ?>
+                    <div class="right-card">
+                        <div class="right-card-row">
+                            <span class="right-label">项目名称：</span>
+                            <span class="right-value"><?php echo htmlspecialchars($project['title']); ?></span>
+                        </div>
+                        <div class="right-card-row">
+                            <span class="right-label">发布时间：</span>
+                            <span class="right-value"><?php echo $project['create_time']; ?></span>
+                        </div>
+                        <div class="right-card-row">
+                            <span class="right-label">项目简介：</span>
+                            <div class="right-summary">
+                                <?php
+                                $short = $summary ?: $project['content'];
+                                $short = strip_tags($short);
+                                if (mb_strlen($short,'UTF-8') > 80) {
+                                    echo htmlspecialchars(mb_substr($short,0,80,'UTF-8')).'…';
+                                } else {
+                                    echo htmlspecialchars($short);
+                                }
+                                ?>
+                            </div>
+                        </div>
+                        <div class="right-card-row">
+                            <span class="right-label">发起人/组织：</span>
+                            <span class="right-value"><?php echo htmlspecialchars($publisher); ?></span>
+                        </div>
+                        <div class="right-card-row">
+                            <span class="right-label">活动地点：</span>
+                            <span class="right-value"><?php echo htmlspecialchars($location); ?></span>
+                        </div>
+                        <div class="right-card-row">
+                            <span class="right-label">截止日期：</span>
+                            <span class="right-value"><?php echo htmlspecialchars($endTime); ?></span>
+                        </div>
+
+<?php
+$signupMsg    = \think\facade\Session::get('signup_msg');
+$signupStatus = \think\facade\Session::get('signup_status'); // success / error
+?>
+<?php if (!empty($signupMsg)): ?>
+    <div style="
+        margin-top:0.75rem;
+        margin-bottom:0.5rem;
+        padding:0.5rem 0.8rem;
+        border-radius:0.5rem;
+        font-size:0.85rem;
+        <?php if ($signupStatus === 'success'): ?>
+            background:#ecfdf3;color:#166534;border:1px solid #bbf7d0;
+        <?php else: ?>
+            background:#fef2f2;color:#991b1b;border:1px solid #fecaca;
+        <?php endif; ?>
+    ">
+        <?php echo htmlspecialchars($signupMsg); ?>
+    </div>
+<?php endif; ?>
+
+                        <?php $uid = \think\facade\Session::get('user_id'); ?>
+                        <div style="margin-top:1rem; text-align:center;">
+                            <?php if (!$uid): ?>
+                                <button type="button"
+                                        onclick="window.location.href='/user/login';"
+                                        style="display:inline-flex;align-items:center;justify-content:center;
+                                               padding:0.5rem 1.6rem;border-radius:999px;border:none;
+                                               background:#ec4899;color:#fff;font-size:0.9rem;
+                                               cursor:pointer;box-shadow:0 2px 6px rgba(236,72,153,0.35);">
+                                    报名参与该项目
+                                </button>
+                            <?php else: ?>
+                                <form method="post" action="/project/signup" style="display:inline;">
+                                    <input type="hidden" name="project_id" value="<?php echo (int)$project['id']; ?>">
+                                    <button type="submit"
+                                            style="display:inline-flex;align-items:center;justify-content:center;
+                                                   padding:0.5rem 1.6rem;border-radius:999px;border:none;
+                                                   background:#ec4899;color:#fff;font-size:0.9rem;
+                                                   cursor:pointer;box-shadow:0 2px 6px rgba(236,72,153,0.35);">
+                                        报名参与该项目
+                                    </button>
+                                </form>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
+                    <!-- 捐赠模块 -->
+                    <div style="margin-top:1.5rem;">
+                        <h3 style="font-size:1rem;color:#111827;margin-bottom:0.75rem;">捐赠支持该项目</h3>
+                        <div style="display:flex;gap:0.75rem;align-items:flex-start;">
+
+                            <!-- 左侧：收款二维码 -->
+                            <div style="width:120px;flex-shrink:0;">
+                                <?php if (!empty($project['qrcode_image'])): ?>
+                                    <div style="width:120px;height:120px;border-radius:0.75rem;border:1px solid #e5e7eb;overflow:hidden;background:#f9fafb;">
+                                        <img src="<?php echo htmlspecialchars($project['qrcode_image']); ?>"
+                                             alt="收款二维码"
+                                             style="width:100%;height:100%;object-fit:cover;">
+                                    </div>
+                                    <p style="font-size:0.75rem;color:#6b7280;margin-top:0.35rem;">
+                                        请先使用微信/支付宝扫描二维码完成转账，再提交捐赠记录。
+                                    </p>
+
+                                    <label style="margin-top:0.4rem;display:inline-flex;align-items:center;justify-content:center;
+                                                  width:90px;height:30px;border-radius:999px;border:1px solid #d1d5db;
+                                                  font-size:0.78rem;color:#374151;cursor:pointer;background:#ffffff;overflow:hidden;">
+                                        <input type="file" id="donate-proof-file" accept="image/*"
+                                               style="display:none;">
+                                        选择文件
+                                    </label>
+                                <?php else: ?>
+                                    <div style="width:120px;height:120px;border-radius:0.75rem;border:1px dashed #e5e7eb;display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:#9ca3af;">
+                                        暂无收款码
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+
+                            <!-- 右侧：捐赠表单 -->
+                            <div style="flex:1;">
+                                <form method="post" action="/project/donate" class="space-y-2">
+                                    <input type="hidden" name="project_id" value="<?php echo (int)$project['id']; ?>">
+
+                                    <div>
+                                        <label style="display:block;font-size:0.85rem;color:#374151;margin-bottom:2px;">捐赠类型</label>
+                                        <select name="type"
+                                                onchange="toggleDonateType(this.value)"
+                                                style="width:100%;border:1px solid #d1d5db;border-radius:0.375rem;padding:0.35rem 0.5rem;font-size:0.85rem;">
+                                            <option value="money">资金捐赠</option>
+                                            <option value="goods">物资捐赠</option>
+                                        </select>
+                                    </div>
+
+                                    <div id="donate-money-box">
+                                        <label style="display:block;font-size:0.85rem;color:#374151;margin-bottom:2px;">捐赠金额（元）</label>
+                                        <input type="number" name="amount" min="0.01" step="0.01"
+                                               placeholder="请输入捐赠金额"
+                                               style="width:100%;border:1px solid #d1d5db;border-radius:0.375rem;padding:0.35rem 0.5rem;font-size:0.85rem;">
+                                    </div>
+
+                                    <div id="donate-goods-box" style="display:none;">
+                                        <label style="display:block;font-size:0.85rem;color:#374151;margin-bottom:2px;">物资名称</label>
+                                        <input type="text" name="goods_name"
+                                               placeholder="例如：口罩、矿泉水、衣物等"
+                                               style="width:100%;border:1px solid #d1d5db;border-radius:0.375rem;padding:0.35rem 0.5rem;font-size:0.85rem;margin-bottom:0.35rem;">
+                                        <label style="display:block;font-size:0.85rem;color:#374151;margin-bottom:2px;">物资数量</label>
+                                        <input type="text" name="goods_quantity"
+                                               placeholder="例如：100个、5箱等"
+                                               style="width:100%;border:1px solid #d1d5db;border-radius:0.375rem;padding:0.35rem 0.5rem;font-size:0.85rem;">
+                                    </div>
+
+                                    <div>
+                                        <label style="display:block;font-size:0.85rem;color:#374151;margin-bottom:2px;">捐赠凭证（可选）</label>
+                                        <textarea name="remark" id="donate-remark" rows="2"
+                                                  placeholder="可以简单描述转账时间、方式，或粘贴转账凭证图片链接"
+                                                  style="width:100%;border:1px solid #d1d5db;border-radius:0.375rem;padding:0.35rem 0.5rem;font-size:0.85rem;resize:vertical;"></textarea>
+
+                                        <div id="donate-proof-preview-wrap"
+                                             style="margin-top:0.4rem;display:none;border:1px solid #e5e7eb;border-radius:0.5rem;overflow:hidden;background:#f9fafb;">
+                                            <img id="donate-proof-preview" src="" alt="捐赠凭证预览"
+                                                 style="width:100%;max-height:200px;object-fit:contain;">
+                                        </div>
+                                    </div>
+
+                                    <div style="text-align:right;margin-top:0.6rem;">
+                                        <button type="submit"
+                                                style="display:inline-flex;align-items:center;justify-content:center;
+                                                       padding:0.4rem 1.6rem;border-radius:999px;border:none;
+                                                       background:#10b981;color:#fff;font-size:0.85rem;
+                                                       cursor:pointer;box-shadow:0 2px 5px rgba(16,185,129,0.35);">
+                                            提交捐赠记录
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 推荐项目 -->
+                    <div class="recommend-section">
+                        <div class="recommend-title">推荐的公益项目</div>
+                        <div class="recommend-list">
+                            <?php
+                            $recDefaultCover = 'https://images.unsplash.com/photo-1762756391885-223053d08dc1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080';
+                            if (!empty($recommendList)) {
+                                foreach ($recommendList as $r) {
+                                    $rCover = !empty($r['cover']) ? $r['cover'] : $recDefaultCover;
+                                    ?>
+                                    <div class="recommend-item"
+                                         onclick="window.location.href='/project/detail?id=<?php echo (int)$r['id']; ?>'"
+                                         style="cursor:pointer;">
+                                        <div class="recommend-cover">
+                                            <img
+                                                src="<?php echo htmlspecialchars($rCover); ?>"
+                                                alt="<?php echo htmlspecialchars($r['title']); ?>"
+                                                onerror="this.src='<?php echo $recDefaultCover; ?>';"
+                                            />
+                                        </div>
+                                        <div class="recommend-main">
+                                            <div class="recommend-title-text">
+                                                <?php echo htmlspecialchars($r['title']); ?>
+                                            </div>
+                                            <div class="recommend-time">
+                                                发布时间：<?php echo $r['create_time']; ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                }
+                            } else {
+                                ?>
+                                <p style="font-size:0.85rem;color:#6b7280;">暂无推荐项目。</p>
+                                <?php
+                            }
+                            ?>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- block-main：正文 + 评论 -->
+                <section class="block-main">
+                    <div class="project-content">
+                        <?php echo $project['content']; ?>
+                    </div>
+
+                    <!-- 评论区：发表评论 -->
+                    <h2 class="comment-title">发表评论</h2>
+                    <form method="post" action="/comment/add">
+                        <input type="hidden" name="type" value="project">
+                        <input type="hidden" name="target_id" value="<?php echo $project['id']; ?>">
+                        <input type="hidden" name="parent_id" value="0">
+                        <textarea
+                            name="content"
+                            class="comment-textarea"
+                            placeholder="欢迎留下你对本项目的看法和建议……"
+                            required
+                        ></textarea>
+                        <div class="comment-submit-wrap">
+                            <button type="submit" class="comment-submit-btn">提交评论</button>
+                        </div>
+                    </form>
+
+                    <!-- 评论列表 -->
+                    <div class="comment-list">
+                        <?php if (!empty($topComments)): ?>
+                            <?php
+                            $defaultAvatar = 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop';
+                            ?>
+                            <?php foreach ($topComments as $c): ?>
+                                <div class="comment-item">
+                                    <div class="avatar-circle">
+                                        <img
+                                            src="<?php echo $defaultAvatar; ?>"
+                                            alt="用户头像"
+                                            onerror="this.src='<?php echo $defaultAvatar; ?>';"
+                                        />
+                                    </div>
+                                    <div class="comment-main">
+                                        <div class="comment-meta">
+                                            <div>
+                                                <div class="comment-username">
+                                                    <?php echo htmlspecialchars($c['nickname']); ?>
+                                                    <?php if (!empty($c['is_verified'])): ?>
+                                                        <span class="comment-verified-badge">
+                                                            <span class="comment-verified-badge-icon">✔</span>
+                                                            <span>已认证</span>
+                                                        </span>
+                                                    <?php endif; ?>
+                                                </div>
+                                                <div class="comment-time">
+                                                    <?php echo $c['create_time']; ?>
+                                                </div>
+                                            </div>
+                                            <button
+                                                type="button"
+                                                class="reply-button"
+                                                onclick="toggleReplyForm(<?php echo $c['id']; ?>)"
+                                            >
+                                                回复
+                                            </button>
+                                        </div>
+                                        <div class="comment-content">
+                                            <?php echo nl2br(htmlspecialchars($c['content'])); ?>
+                                        </div>
+
+                                        <!-- 回复列表 -->
+                                        <?php if (!empty($repliesByParent[$c['id']])): ?>
+                                            <div class="reply-list">
+                                                <?php foreach ($repliesByParent[$c['id']] as $r): ?>
+                                                    <div class="reply-item">
+                                                        <div style="font-size:0.9rem;color:#111827;">
+                                                            <?php echo htmlspecialchars($r['nickname']); ?>
+                                                            <?php if (!empty($r['is_verified'])): ?>
+                                                                <span class="comment-verified-badge">
+                                                                    <span class="comment-verified-badge-icon">✔</span>
+                                                                    <span>已认证</span>
+                                                                </span>
+                                                            <?php endif; ?>
+                                                            回复：
+                                                        </div>
+                                                        <div style="font-size:0.9rem;color:#374151;">
+                                                            <?php echo nl2br(htmlspecialchars($r['content'])); ?>
+                                                        </div>
+                                                        <div style="font-size:0.75rem;color:#9ca3af;margin-top:2px;">
+                                                            时间：<?php echo $r['create_time']; ?>
+                                                        </div>
+                                                    </div>
+                                                <?php endforeach; ?>
+                                            </div>
+                                        <?php endif; ?>
+
+                                        <!-- 回复表单 -->
+                                        <div class="reply-form" id="reply-form-<?php echo $c['id']; ?>" style="display:none;">
+                                            <form method="post" action="/comment/add">
+                                                <input type="hidden" name="type" value="project">
+                                                <input type="hidden" name="target_id" value="<?php echo $project['id']; ?>">
+                                                <input type="hidden" name="parent_id" value="<?php echo $c['id']; ?>">
+                                                <textarea
+                                                    name="content"
+                                                    class="reply-textarea"
+                                                    placeholder="回复该评论……"
+                                                    required
+                                                ></textarea>
+                                                <div class="reply-submit-wrap">
+                                                    <button type="submit" class="reply-submit-btn">提交回复</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <p style="font-size:0.9rem;color:#6b7280;">暂无评论，快来抢沙发吧！</p>
+                        <?php endif; ?>
+                    </div>
+
+                    <p style="margin-top:1.5rem;font-size:0.9rem;">
+                        <a href="/project/index" style="color:#3b82f6;text-decoration:none;">&laquo; 返回项目列表</a>
+                    </p>
+                </section>
+            </div>
+        <?php else: ?>
+            <p>项目不存在</p>
+        <?php endif; ?>
+    </main>
+
+
+
+
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h4>友情链接</h4>
+                    <ul>
+                        <li><a href="https://www.baidufoundation.org.cn/">百度基金会</a></li>
+                        <li><a href="https://gongyi.qq.com/">腾讯公益</a></li>
+                        <li><a href="https://www.antfoundation.org.cn/">浙江蚂蚁公益基金会</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>便捷通道</h4>
+                    <ul>
+                        <li><a href="/news/index?category=notice">平台公告</a></li>
+                        <li><a href="/help/index">求助信息</a></li>
+                        <li><a href="/project/index">公益项目</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>我要反馈</h4>
+                    <ul>
+                        <li>
+                            <p>
+                                这里是国开社区公益平台，在这里你可以寻求帮助，也可以帮助他人。如果你有任何意见，欢迎联系我们。
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>联系我们</h4>
+                    <div class="footer-contact">
+                        <div class="footer-contact-item">
+                            <svg class="icon icon-sm" width="26" height="26" viewBox="0 0 24 24">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                            </svg>
+                            <span>电话：400-888-888</span>
+                        </div>
+                        <div class="footer-contact-item">
+                            <svg class="icon icon-sm" width="26" height="26" viewBox="0 0 24 24">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                            <span>邮箱：admin@admin.com</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>
+                    © 版权所有 <span class="red">国开社区公益</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleReplyForm(id) {
+            var box = document.getElementById('reply-form-' + id);
+            if (!box) return;
+            if (box.style.display === 'none' || box.style.display === '') {
+                box.style.display = 'block';
+            } else {
+                box.style.display = 'none';
+            }
+        }
+    </script>
+
+    <script>
+    function toggleDonateType(type) {
+        var moneyBox = document.getElementById('donate-money-box');
+        var goodsBox = document.getElementById('donate-goods-box');
+        if (!moneyBox || !goodsBox) return;
+        if (type === 'goods') {
+            moneyBox.style.display = 'none';
+            goodsBox.style.display = 'block';
+        } else {
+            moneyBox.style.display = 'block';
+            goodsBox.style.display = 'none';
+        }
+    }
+
+    (function () {
+        var fileInput   = document.getElementById('donate-proof-file');
+        var remarkInput = document.getElementById('donate-remark');
+        var wrap        = document.getElementById('donate-proof-preview-wrap');
+        var img         = document.getElementById('donate-proof-preview');
+
+        if (!fileInput || !remarkInput || !wrap || !img) return;
+
+        fileInput.addEventListener('change', function () {
+            var file = this.files[0];
+            if (!file) return;
+
+            var formData = new FormData();
+            formData.append('proof', file);
+
+            fetch('/project/uploadDonateProof', {
+                method: 'POST',
+                body: formData
+            }).then(function (res) {
+                return res.json();
+            }).then(function (data) {
+                if (data.code === 1 && data.url) {
+                    var cur  = remarkInput.value.trim();
+                    var link = data.url;
+                    remarkInput.value = cur ? (cur + "\n图片凭证：" + link) : ("图片凭证：" + link);
+
+                    img.src = link;
+                    wrap.style.display = 'block';
+                } else {
+                    alert(data.msg || '上传失败');
+                }
+            }).catch(function () {
+                alert('上传失败，请稍后再试');
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>国开社区公益 - 关于我们</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background-color: #111827;
+            color: white;
+            padding: 0.5rem 1.5rem;
+        }
+
+        .top-bar-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .top-bar-text {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .top-bar-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .top-bar-actions a {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.875rem;
+            text-decoration: none;
+        }
+
+        .top-bar-actions .login {
+            color: #60a5fa;
+        }
+
+        .top-bar-actions .register {
+            color: #f87171;
+        }
+
+        .top-bar-actions .username {
+            color: #fbbf24;
+        }
+
+        .top-bar-actions .logout {
+            color: #9ca3af;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .nav-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            background-color: #ef4444;
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-text {
+            font-size: 1.125rem;
+            color: #1f2937;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: #4b5563;
+            transition: color 0.2s;
+        }
+
+        .nav-menu a:hover, .nav-menu a.active {
+            color: #ef4444;
+        }
+
+        .nav-contact {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .contact-icon {
+            background-color: #ef4444;
+            border-radius: 50%;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .contact-text .label {
+            font-size: 0.75rem;
+            color: #ef4444;
+        }
+
+        .contact-text .phone {
+            color: #1f2937;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            max-width: 1280px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 48px 24px;
+        }
+
+        .content-wrapper {
+            display: flex;
+            gap: 32px;
+        }
+
+        /* Article Section */
+        .article-section {
+            flex: 1;
+        }
+
+        .article-container {
+            background: white;
+            border-radius: 8px;
+            padding: 32px;
+        }
+
+        .article-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: #111827;
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 320px;
+            border-radius: 8px;
+            object-fit: cover;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #111827;
+        }
+
+        .article-text {
+            font-size: 14px;
+            color: #4b5563;
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .image-grid img {
+            width: 100%;
+            height: 220px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .core-services-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .service-card {
+            background-color: #f9fafb;
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .service-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ec4899;
+            margin-bottom: 8px;
+        }
+
+        .service-text {
+            font-size: 13px;
+            color: #4b5563;
+            line-height: 1.7;
+        }
+
+        .cta-block {
+            margin-top: 24px;
+            border-radius: 8px;
+            padding: 24px;
+            background: linear-gradient(90deg, #ec4899, #f97316);
+            color: #fff;
+            text-align: center;
+        }
+
+        .cta-block h2 {
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+
+        .cta-block p {
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .cta-actions {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .cta-button {
+            background-color: #ffffff;
+            color: #ec4899;
+            padding: 8px 20px;
+            border-radius: 999px;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            background-color: #f3f4f6;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #111827;
+            color: #9ca3af;
+            padding: 3rem 0;
+        }
+
+        .footer-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-column h4 {
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-column a {
+            color: #9ca3af;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-column a:hover {
+            color: white;
+        }
+
+        .footer-contact {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-bottom {
+            padding-top: 2rem;
+            border-top: 1px solid #374151;
+            text-align: center;
+            font-size: 0.875rem;
+        }
+
+        .footer-bottom .red {
+            color: #ef4444;
+        }
+
+        /* Icons */
+        .icon {
+            width: 24px;
+            height: 24px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .icon-sm {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                gap: 1rem;
+                font-size: 0.875rem;
+            }
+
+            .content-wrapper {
+                flex-direction: column;
+            }
+
+            .core-services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .image-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <div class="top-bar-text">
+                <span>邻里有难我在场，社区公益一起帮</span>
+            </div>
+            <div class="top-bar-actions">
+                <?php
+                $userId   = \think\facade\Session::get('user_id');
+                $username = \think\facade\Session::get('username');
+                ?>
+                <?php if (!empty($userId)): ?>
+                    <span class="username">你好，<?php echo htmlspecialchars($username); ?></span>
+                    <a href="/user/logout" class="logout">退出</a>
+                <?php else: ?>
+                    <a href="/user/login" class="login">登录</a>
+                    <a href="/user/register" class="register">注册</a>
+                <?php endif; ?>
+                <a href="/dashboard/index" style="color:#ffffff;">用户中心</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg class="icon" style="color:white;fill:white;">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                </div>
+                <div class="logo-text">国开社区公益</div>
+            </div>
+
+            <ul class="nav-menu">
+                <li><a href="/">主页</a></li>
+                <li><a href="/about/index" class="active">关于我们</a></li>
+                <li><a href="/project/index">公益广场</a></li>
+                <li><a href="/help/index">求助中心</a></li>
+                <li><a href="/news/index">新闻案例</a></li>
+                <li><a href="/contact/index">联系我们</a></li>
+            </ul>
+
+            <div class="nav-contact">
+                <div class="contact-icon">
+                    <svg class="icon icon-sm" style="color:white;" width="26" height="26" viewBox="0 0 24 24">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>
+                </div>
+                <div class="contact-text">
+                    <div class="label">联系我们</div>
+                    <div class="phone">400-888-888</div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <div class="content-wrapper">
+            <div class="article-section">
+                <div class="article-container">
+                    <!-- Title -->
+                    <h1 class="article-title">
+                        国开社区公益 - 邻里有难我在场，社区公益一起帮
+                    </h1>
+
+                    <!-- Hero Image -->
+                    <img
+                        class="hero-image"
+                        src="https://images.unsplash.com/photo-1760992004000-69b29eb0384c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
+                        alt="社区志愿者服务"
+                    />
+
+                    <!-- Platform Introduction -->
+                    <section style="margin-bottom:24px;">
+                        <h2 class="section-title">平台简介</h2>
+                        <p class="article-text">
+                            国开社区公益是一个致力于整合社区资源、促进邻里互助、传递社会温暖的综合性服务平台。我们秉承“人人为我，我为人人”的理念，搭建起居民、志愿者、社会组织与公益项目之间的桥梁，让爱心在社区中流动，让温暖在邻里间传递。
+                        </p>
+                        <p class="article-text">
+                            平台汇聚了众多优质公益项目和热心志愿者，为社区居民提供全方位的关怀与帮助。无论是老年人日常照料、儿童课业辅导，还是环境保护、文化传承，我们都致力于为每一位需要帮助的人提供及时、专业的服务。
+                        </p>
+                    </section>
+
+                    <!-- Image Grid -->
+                    <div class="image-grid">
+                        <img
+                            src="https://images.unsplash.com/photo-1761666519794-ad6fbcef058b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
+                            alt="关爱老人服务"
+                        />
+                        <img
+                            src="https://images.unsplash.com/photo-1761666507437-9fb5a6ef7b0a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
+                            alt="志愿者互助"
+                        />
+                    </div>
+
+                    <!-- Core Services -->
+                    <section style="margin-bottom:24px;">
+                        <h2 class="section-title">核心服务</h2>
+                        <div class="core-services-grid">
+                            <div class="service-card">
+                                <div class="service-title">爱心助老服务</div>
+                                <div class="service-text">
+                                    为孤寡老人、失能老人提供日常照料、医疗陪护、心理慰藉等全方位服务，让每一位老人都能享受温暖的晚年生活。
+                                </div>
+                            </div>
+                            <div class="service-card">
+                                <div class="service-title">青少年成长计划</div>
+                                <div class="service-text">
+                                    为困难家庭儿童提供课业辅导、兴趣培养、心理疏导等服务，帮助孩子们健康快乐成长，实现人生梦想。
+                                </div>
+                            </div>
+                            <div class="service-card">
+                                <div class="service-title">社区环境维护</div>
+                                <div class="service-text">
+                                    组织居民参与社区绿化、卫生清洁、垃圾分类等活动，共同营造整洁优美的居住环境，提升社区生活品质。
+                                </div>
+                            </div>
+                            <div class="service-card">
+                                <div class="service-title">文化传承活动</div>
+                                <div class="service-text">
+                                    开展传统文化讲座、技艺传习、节日庆典等活动，传承优秀文化传统，增强社区文化凝聚力和归属感。
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Platform Values -->
+                    <section>
+                        <h2 class="section-title">平台价值</h2>
+                        <p class="article-text">
+                            通过这个公益服务平台，我们不仅为需要帮助的群体提供了实实在在的服务，更重要的是培育了社区互助文化，增强了居民的社会责任感和参与意识。每一次志愿服务都是一次爱的传递，每一个公益项目都是一份温暖的延续。
+                        </p>
+                        <p class="article-text">
+                            我们相信，当每个人都愿意为社区贡献一份力量时，我们的社区就会变得更加和谐美好。让我们携手共建温暖社区，让公益服务成为生活的一部分，让爱心在我们身边流动！
+                        </p>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h4>友情链接</h4>
+                    <ul>
+                        <li><a href="https://www.baidufoundation.org.cn/">百度基金会</a></li>
+                        <li><a href="https://gongyi.qq.com/">腾讯公益</a></li>
+                        <li><a href="https://www.antfoundation.org.cn/">浙江蚂蚁公益基金会</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>便捷通道</h4>
+                    <ul>
+                        <li><a href="/news/index?category=notice">平台公告</a></li>
+                        <li><a href="/help/index">求助信息</a></li>
+                        <li><a href="/project/index">公益项目</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>我要反馈</h4>
+                    <ul>
+                        <li>
+                            <p>
+                                这里是国开社区公益平台，在这里你可以寻求帮助，也可以帮助他人。如果你有任何意见，欢迎联系我们。
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>联系我们</h4>
+                    <div class="footer-contact">
+                        <div class="footer-contact-item">
+                            <svg class="icon icon-sm" width="26" height="26" viewBox="0 0 24 24">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                            </svg>
+                            <span>电话：400-888-888</span>
+                        </div>
+                        <div class="footer-contact-item">
+                            <svg class="icon icon-sm" width="26" height="26" viewBox="0 0 24 24">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                            <span>邮箱：admin@admin.com</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>
+                    © 版权所有 <span class="red">国开社区公益</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

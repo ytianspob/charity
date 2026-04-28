@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>国开社区公益 - 联系我们</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background-color: #111827;
+            color: white;
+            padding: 0.5rem 1.5rem;
+        }
+
+        .top-bar-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .top-bar-text {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .top-bar-text .gray {
+            color: #d1d5db;
+        }
+
+        .top-bar-text .red {
+            color: #ef4444;
+        }
+
+        .top-bar-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .top-bar-actions a {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.875rem;
+            text-decoration: none;
+        }
+
+        .top-bar-actions .login {
+            color: #60a5fa;
+        }
+
+        .top-bar-actions .register {
+            color: #f87171;
+        }
+
+        .top-bar-actions .username {
+            color: #fbbf24;
+        }
+
+        .top-bar-actions .logout {
+            color: #9ca3af;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .nav-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            background-color: #ef4444;
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-text {
+            font-size: 1.125rem;
+            color: #1f2937;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: #4b5563;
+            transition: color 0.2s;
+        }
+
+        .nav-menu a:hover, .nav-menu a.active {
+            color: #ef4444;
+        }
+
+        .nav-contact {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .contact-icon {
+            background-color: #ef4444;
+            border-radius: 50%;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .contact-text .label {
+            font-size: 0.75rem;
+            color: #ef4444;
+        }
+
+        .contact-text .phone {
+            color: #1f2937;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            max-width: 1280px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 48px 24px;
+        }
+
+        .content-wrapper {
+            display: flex;
+            gap: 32px;
+        }
+
+        /* Message Cards Sidebar */
+        .sidebar {
+            width: 320px;
+            flex-shrink: 0;
+        }
+
+        .messages-container {
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .message-card {
+            background: linear-gradient(135deg, #ff1e6b 0%, #ff4d8f 100%);
+            color: white;
+            padding: 24px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: box-shadow 0.3s;
+        }
+
+        .message-card:hover {
+            box-shadow: 0 10px 15px rgba(0,0,0,0.2);
+        }
+
+        .message-card h3 {
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        .message-card p {
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+            opacity: 0.9;
+        }
+
+        .message-card .date {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        /* Message Form */
+        .form-section {
+            flex: 1;
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 8px;
+            padding: 32px;
+        }
+
+        .form-container h1 {
+            font-size: 28px;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        .form-container .subtitle {
+            color: #6b7280;
+            margin-bottom: 32px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        input, textarea {
+            padding: 12px 16px;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #ff1e6b;
+        }
+
+        textarea {
+            resize: none;
+        }
+
+        button {
+            width: 100%;
+            background: linear-gradient(90deg, #ff1e6b 0%, #ff4d8f 100%);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 50px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: box-shadow 0.3s;
+        }
+
+        button:hover {
+            box-shadow: 0 10px 25px rgba(255, 30, 107, 0.3);
+        }
+
+        .error-message {
+            margin-top: 0.5rem;
+            color: #ef4444;
+            font-size: 0.85rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #111827;
+            color: #9ca3af;
+            padding: 3rem 0;
+        }
+
+        .footer-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-column h4 {
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-column a {
+            color: #9ca3af;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-column a:hover {
+            color: white;
+        }
+
+        .footer-contact {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-bottom {
+            padding-top: 2rem;
+            border-top: 1px solid #374151;
+            text-align: center;
+            font-size: 0.875rem;
+        }
+
+        .footer-bottom p {
+            margin-bottom: 1rem;
+        }
+
+        .footer-bottom .red {
+            color: #ef4444;
+        }
+
+        /* Icons */
+        .icon {
+            width: 24px;
+            height: 24px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .icon-sm {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                gap: 1rem;
+                font-size: 0.875rem;
+            }
+
+            .content-wrapper {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <div class="top-bar-text">
+                <span>邻里有难我在场，社区公益一起帮</span>
+            </div>
+            <div class="top-bar-actions">
+                <?php
+                $userId   = \think\facade\Session::get('user_id');
+                $username = \think\facade\Session::get('username');
+                ?>
+                <?php if (!empty($userId)): ?>
+                    <span class="username">你好，<?php echo htmlspecialchars($username); ?></span>
+                    <a href="/user/logout" class="logout">退出</a>
+                <?php else: ?>
+                    <a href="/user/login" class="login">登录</a>
+                    <a href="/user/register" class="register">注册</a>
+                <?php endif; ?>
+                <a href="/dashboard/index" style="color: #ffffff;">用户中心</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg class="icon" style="color: white; fill: white;">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                </div>
+                <div class="logo-text">国开社区公益</div>
+            </div>
+
+            <ul class="nav-menu">
+                <li><a href="/">主页</a></li>
+                <li><a href="/about/index">关于我们</a></li>
+                <li><a href="/project/index">公益广场</a></li>
+                <li><a href="/help/index">求助中心</a></li>
+                <li><a href="/news/index">新闻案例</a></li>
+                <li><a href="/contact/index" class="active">联系我们</a></li>
+            </ul>
+
+            <div class="nav-contact">
+                <div class="contact-icon">
+                    <svg class="icon icon-sm" style="color: white;" width="26" height="26" viewBox="0 0 24 24">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>
+                </div>
+                <div class="contact-text">
+                    <div class="label">联系我们</div>
+                    <div class="phone">400-888-888</div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <div class="content-wrapper">
+            <!-- Left Sidebar - Message Cards -->
+            <div class="sidebar">
+                <div class="messages-container">
+                    <div class="message-card">
+                        <h3>联系电话</h3>
+                        <p>400-888-888</p>
+                    </div>
+                    <div class="message-card">
+                        <h3>联系邮箱</h3>
+                        <p>admin@admin.com</p>
+                    </div>
+                    <div class="message-card">
+                        <h3>联系地址</h3>
+                        <p>中国北京市XX区XX路XX社区XX号</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Content - Message Form -->
+            <div class="form-section">
+                <div class="form-container">
+                    <h1>发送留言</h1>
+                    <p class="subtitle">如您有任何意见，欢迎通过下方表单发送给我们。</p>
+
+                    <!-- 提交到 Feedback::submit -->
+                    <form id="messageForm" method="post" action="/feedback/submit">
+                        <div class="form-row">
+                            <input type="text" id="nickname" name="name" placeholder="姓名">
+                            <input type="text" id="email" name="contact" placeholder="联系方式（邮箱/手机等）">
+                        </div>
+                        <textarea id="message" name="message" rows="8" placeholder="请输入您的留言..." required></textarea>
+                        <button type="submit">发送</button>
+                        <div id="errorBox" class="error-message" style="display:none;"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h4>友情链接</h4>
+                    <ul>
+                        <li><a href="https://www.baidufoundation.org.cn/">百度基金会</a></li>
+                        <li><a href="https://gongyi.qq.com/">腾讯公益</a></li>
+                        <li><a href="https://www.antfoundation.org.cn/">浙江蚂蚁公益基金会</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>便捷通道</h4>
+                    <ul>
+                        <li><a href="/news/index?category=notice">平台公告</a></li>
+                        <li><a href="/help/index">求助信息</a></li>
+                        <li><a href="/project/index">公益项目</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>我要反馈</h4>
+                    <ul>
+                        <li>
+                            <p>
+                                这里是国开社区公益平台，在这里你可以寻求帮助，也可以帮助他人。如果你有任何意见，欢迎联系我们。
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>联系我们</h4>
+                    <div class="footer-contact">
+                        <div class="footer-contact-item">
+                            <svg class="icon icon-sm" width="26" height="26" viewBox="0 0 24 24">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                            </svg>
+                            <span>电话：400-888-888</span>
+                        </div>
+                        <div class="footer-contact-item">
+                            <svg class="icon icon-sm" width="26" height="26" viewBox="0 0 24 24">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                            <span>邮箱：admin@admin.com</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>
+                    © 版权所有 <span class="red">国开社区公益</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+<script>
+    const form = document.getElementById('messageForm');
+    const errorBox = document.getElementById('errorBox');
+
+    form.addEventListener('submit', function (e) {
+        errorBox.style.display = 'none';
+        errorBox.textContent = '';
+
+        const message = document.getElementById('message').value.trim();
+
+        if (!message) {
+            e.preventDefault();
+            errorBox.textContent = '留言内容不能为空';
+            errorBox.style.display = 'block';
+            return;
+        }
+
+        if (message.length > 1000) {
+            e.preventDefault();
+            errorBox.textContent = '留言内容不能超过1000字';
+            errorBox.style.display = 'block';
+            return;
+        }
+        // 校验通过后提交，由 /feedback/submit 处理
+    });
+</script>
+</body>
+</html>
